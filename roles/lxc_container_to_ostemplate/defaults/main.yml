@@ -1,0 +1,17 @@
+---
+# defaults file for lxc_container_to_ostemplate
+
+# Set either the hostname or the vmid of the container to convert into a template.
+# If both are set, the vmid will take precedence
+lxcostemplate_vmid:
+lxcostemplate_hostname:
+# Select the type of vzdump backup to perform. Options are stop, suspend and snapshot
+lxcostemplate_vzdump_mode: snapshot
+
+# Name of the ostemplate image to generate. .tar.gz will be appended automatically
+lxcostemplate_image: custom-ubuntu_18.04
+# Name of the storage volume under which the ostemplate will be saved
+lxcostemplate_storage: local
+
+# Set to yes if you want to overwrite an already existing image
+lxcostemplate_overwrite: no

@@ -1,0 +1,22 @@
+---
+- name: Verify lxc_containers
+  hosts: containers
+  remote_user: root
+  gather_facts: no
+  tasks:
+  - name: Verify connection and Ansible execution on bootstrapped containers
+    setup:
+
+- name: Create containers from generated ostemplates
+  hosts: pve_nodes
+  tasks:
+  - include: tasks/verify_lxc_containers.yml
+    loop: '{{ groups["custom_containers"] }}'
+
+- name: Verify new containers
+  hosts: custom_containers
+  remote_user: root
+  gather_facts: no
+  tasks:
+  - name: Verify connection and Ansible execution on containers from ostemplate
+    setup:

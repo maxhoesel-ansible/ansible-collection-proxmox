@@ -1,0 +1,5 @@
+- name: Generate ostemplate image # noqa 301
+  shell: >-
+    vzdump {{ lxcostemplate_vmid }} --stdout --mode {{ lxcostemplate_vzdump_mode }} --compress gzip >
+    {{ lxcostemplate_storage_path }}/{{ lxcostemplate_image }}.tar.gz
+  become: yes

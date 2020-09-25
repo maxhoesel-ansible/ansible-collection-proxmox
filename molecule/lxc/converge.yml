@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: pve_nodes
+  tasks:
+  - name: Create containers and ostemplates
+    include: tasks/converge_lxc_containers.yml
+    loop: '{{ groups["containers"] }}'

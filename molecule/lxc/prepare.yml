@@ -1,0 +1,17 @@
+- hosts: pve_nodes
+  tasks:
+  - name: Set root user password
+    user:
+      name: root
+      password: '{{ pve_api_password | password_hash("sha512") }}'
+    become: yes
+  - name: Network config is installed
+    template:
+      src: interfaces.j2
+      dest: /etc/network/interfaces
+    become: yes
+  - name: Restart networking
+    service:
+      name: networking
+      state: restarted
+    become: yes

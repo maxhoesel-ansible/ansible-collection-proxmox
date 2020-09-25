@@ -1,0 +1,37 @@
+- name: Container is present
+  proxmox:
+    api_user: '{{ pve_api_user }}'
+    api_password: '{{ pve_api_password }}'
+    api_host: '{{ pve_api_host }}'
+    cores: '{{ lxccreate_cores }}'
+    cpus: '{{ lxccreate_cpus }}'
+    cpuunits: '{{ lxccreate_cpuunits }}'
+    memory: '{{ lxccreate_memory }}'
+    swap: '{{ lxccreate_swap }}'
+    disk: '{{ lxccreate_disk }}'
+    storage: '{{ lxccreate_storage }}'
+    mounts: '{{ lxccreate_mounts }}'
+    onboot: '{{ lxccreate_onboot }}'
+    nameserver: '{{ lxccreate_nameserver }}'
+    searchdomain: '{{ lxccreate_searchdomain }}'
+    password: '{{ lxccreate_password }}'
+    pubkey: '{{ lxccreate_pubkey }}'
+    unprivileged: '{{ lxccreate_unprivileged }}'
+    hostname: '{{ lxccreate_hostname }}'
+    ostemplate: '{{ lxccreate_ostemplate }}'
+    netif: '{{ lxccreate_netif }}'
+    node: '{{ lxccreate_node }}'
+    timeout: '{{ lxccreate_timeout }}'
+  delegate_to: localhost
+  register: pve_lxccreate_task
+- name: Wait for PVE API sync
+  pause:
+    seconds: 10
+- name: Container is started
+  proxmox:
+    api_host: '{{ pve_api_host }}'
+    api_user: '{{ pve_api_user }}'
+    api_password: '{{ pve_api_password }}'
+    hostname: '{{ lxccreate_hostname }}'
+    state: started
+  delegate_to: localhost

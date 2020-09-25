@@ -1,0 +1,7 @@
+lxccreate_hostname: template-centos-8
+lxccreate_ostemplate: local:vztmpl/centos-8-default_20191016_amd64.tar.xz
+lxccreate_netif:
+  # Host-only network for controller/PVE/Container communication (ansible-guests)
+  net0: name=eth0,bridge=vmbr0,ip=192.168.111.201/24,firewall=0
+  # Regular Virtualbox NAT for internet access (guests-NAT)
+  net1: name=eth1,bridge=vmbr1,ip=dhcp,firewall=0
