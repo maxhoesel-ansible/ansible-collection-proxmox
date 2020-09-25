@@ -1,0 +1,16 @@
+- name: Get cluster VMs
+  command: pvesh get /cluster/resources -type vm --output-format json
+  register: pve_cluster_vms
+  changed_when: no
+  check_mode: no
+- name: Get guest VMID
+  set_fact:
+    pve_current_vmid: '{{ (pve_cluster_vms.stdout | from_json | selectattr("name", "match", lxccreate_hostname) | map(attribute="vmid") | list).0 }}'
+- name: Bootstrap script is present on PVE node
+  copy:
+    src: bootstrap-ct.sh
+    dest: /tmp/bootstrap-ct.sh
+- name: Copy bootstrap script to container # noqa 301
+  command: 'pct push {{ pve_current_vmid }} /tmp/bootstrap-ct.sh /tmp/bootstrap-ct.sh --perms 777'
+- name: Bootstrap container # noqa 301
+  command: 'pct exec {{ pve_current_vmid }} /tmp/bootstrap-ct.sh'

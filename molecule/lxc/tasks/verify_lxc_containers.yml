@@ -1,0 +1,10 @@
+- name: Load container vars
+  include_vars:
+    file: '{{ item }}.yml'
+
+- name: Create new container
+  include_role:
+    name: ../../roles/lxc_container
+  vars:
+    lxccreate_bootstrap: no
+    lxccreate_ostemplate_download: no

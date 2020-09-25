@@ -1,0 +1,28 @@
+auto lo
+iface lo inet loopback
+
+# Vagrant Interface
+auto eth0
+iface eth0 inet dhcp
+
+# Provisioning host-only Interface
+iface eth1 inet manual
+
+# NAT interface for container internet access
+iface eth2 inet manual
+
+# Bridge for host-only net
+auto vmbr0
+iface vmbr0 inet static
+	address {{ ansible_eth1.ipv4.address }}
+	netmask {{ ansible_eth1.ipv4.netmask }}
+	bridge-ports eth1
+	bridge-stp off
+	bridge-fd 0
+
+# Bridge for NAT network - not used on node itself
+auto vmbr1
+iface vmbr1 inet dhcp
+	bridge-ports eth2
+	bridge-stp off
+	bridge-fd 0

@@ -1,0 +1,14 @@
+- name: Load container vars
+  include_vars:
+    file: '{{ item }}.yml'
+
+- name: Create container
+  include_role:
+    name: ../../roles/lxc_container
+
+- name: Generate container ostemplate
+  include_role:
+    name: ../../roles/lxc_container_to_ostemplate
+  vars:
+    lxcostemplate_hostname: '{{ lxccreate_hostname }}'
+    lxcostemplate_image: '{{ lxcostemplate_custom_prefix }}{{ lxccreate_ostemplate.split("/").1.split(".tar").0 }}'

@@ -1,0 +1,6 @@
+---
+- include: ostemplate.yml
+- include: provision.yml
+- include: bootstrap.yml
+  when: lxccreate_bootstrap and pve_lxccreate_task.changed
+  become: yes

@@ -1,0 +1,21 @@
+galaxy_info:
+  author: Arios <ansible@arios.me>
+  description: Generate an ostemplate image from a LXC container
+  company:
+
+  license: GPL-3.0-or-later
+
+  min_ansible_version: 2.9
+
+  platforms:
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags:
+  - proxmox
+  - lxc
+  - container
+  - template
+
+dependencies: []

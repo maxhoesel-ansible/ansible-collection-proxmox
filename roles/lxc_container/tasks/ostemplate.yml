@@ -1,0 +1,25 @@
+- name: Set ostemplate storage name
+  set_fact:
+    pve_ostemplate_storage: '{{ lxccreate_ostemplate.split(":")[0] }}'
+
+- name: Get local ostemplates
+  shell: |
+    set -o pipefail
+    pveam list {{ pve_ostemplate_storage }} | cut -f 1 -d" "
+  args:
+    executable: /bin/bash
+  register: pve_existing_ostemplates
+  changed_when: no
+  check_mode: no
+  become: yes
+
+- block:
+  - name: Update ostemplate list
+    command: pveam update
+    changed_when: no
+    check_mode: no
+    become: yes
+  - name: Download required ostemplate
+    command: 'pveam download {{ pve_ostemplate_storage }} {{ lxccreate_ostemplate.split("/")[1] }}'
+    become: yes
+  when: lxccreate_ostemplate_download and not lxccreate_ostemplate in pve_existing_ostemplates.stdout_lines
