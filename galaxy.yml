@@ -59,3 +59,6 @@ homepage: https://github.com/AriosThePhoenix/ansible-collection-proxmox
 
 # The URL to the collection issue tracker
 issues: https://github.com/AriosThePhoenix/ansible-collection-proxmox/issues
+
+build_ignore:
+- .venv
