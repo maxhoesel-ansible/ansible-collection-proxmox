@@ -3,7 +3,7 @@
   - name: Set root user password
     user:
       name: root
-      password: '{{ pve_api_password | password_hash("sha512") }}'
+      password: '{{ pve_root_password | password_hash("sha512") }}'
     become: yes
   - name: Network config is installed
     template:
