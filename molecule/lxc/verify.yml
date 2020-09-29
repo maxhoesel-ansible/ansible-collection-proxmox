@@ -8,10 +8,17 @@
     setup:
 
 - name: Create containers from generated ostemplates
-  hosts: pve_nodes
-  tasks:
-  - include: tasks/verify_lxc_containers.yml
-    loop: '{{ groups["custom_containers"] }}'
+  hosts: custom_containers
+  gather_facts: no
+  serial: 1
+  roles:
+  - name: ../../roles/lxc_container
+    lxccreate_bootstrap: no
+    lxccreate_ostemplate_download: no
+  post_tasks:
+  - name: Wait for containers to start
+    pause:
+      seconds: 30
 
 - name: Verify new containers
   hosts: custom_containers

@@ -84,7 +84,6 @@ This setup allows us to test multiple nodes and guests, while preventing compati
 
 We provision multiple containers to test the bootstrap process on various distributions. If you need to add a new distro/container, follow these steps:
 
-1. Add the container the inventory in `molecule.yml`. Use the next free IP address in the host-only network (counting from 200 for containers)
-2. Add the custom container based on the template in `molecule.yml`. Use the next free IP address in the host-only network (counting form 2020)
-2. Set the containers hostvars in `vars/${CONTAINER_IP}.yml`:
+1. Add the container and the custom template-generated version to the inventory in `inventory/hosts.yml`. Use the next free IP address in the host-only network (counting from 200 for containers and 220 for the custom ones)
+2. Set the containers hostvars in `inventory/host_vars/${CONTAINER_IP}.yml`:
     - Make sure that both network interfaces are configured properly, using the IP address from step 1 (see the other containers for reference)

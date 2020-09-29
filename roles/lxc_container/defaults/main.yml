@@ -1,7 +1,9 @@
 ---
-# Login information for the PVE API. We use the API
-# to create and start LXC containers
-pve_api_host: '{{ ansible_fqdn }}'
+# This role needs API and SSH access to a PVE node with become privileges
+# in order to create a container. Please set pve_host to the corresponding
+# inventory hostname
+pve_host: pve.example.com
+pve_api_host: '{{ pve_host }}'
 pve_api_user: root@pam
 pve_api_password: mypassword
 

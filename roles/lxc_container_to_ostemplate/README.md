@@ -10,7 +10,7 @@ This role performs the following actions:
 Requirements
 ------------
 
-A Proxmox VE host accessible via SSH and the PVE API.
+A Proxmox VE host accessible via SSH and the PVE API that is running the target container (see `defaults/main.yml`) with `become` privileges.
 
 Role Variables
 --------------
@@ -25,13 +25,37 @@ None
 Example Playbook
 ----------------
 
-- hosts: pve_node
+```
+- hosts: all
   roles:
   - role: lxc_container_to_ostemplate
-    pve_lxcostemplate_hostname: ubuntu-18-04
-    pve_lxcostemplate_image: custom-ubuntu-18-04
-    pve_lxcostemplate_storage: local
+    pve_host: mypvehost.example.com
+    pve_ssh_user: root
+    lxcostemplate_hostname: ubuntu-18-04
+    lxcostemplate_image: custom-ubuntu-18-04
+    lxcostemplate_storage: local
+```
 
+Creating a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
+
+Inventory:
+```
+all:
+  children:
+    containers:
+      hosts:
+        192.168.1.123:
+          # Variables unique to every container
+          lxcostemplate_hostname: ct-a
+          lxcostemplate_image: custom-ct-a
+          ...
+        192.168.1.124:
+        ...
+      # Common variables shared between containers
+      lxcostemplate_storage: local
+      pve_host: mypvehost.example.com
+      ...
+```
 
 License
 -------
