@@ -1,6 +1,7 @@
 ---
 - include: ostemplate.yml
+  delegate_to: '{{ pve_host }}'
 - include: provision.yml
 - include: bootstrap.yml
+  delegate_to: '{{ pve_host }}'
   when: lxccreate_bootstrap and pve_lxccreate_task.changed
-  become: yes

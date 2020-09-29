@@ -18,9 +18,9 @@ Other distributions should work as well, as long as they:
 Requirements
 ------------
 
-A Proxmox VE host accessible via SSH and the PVE API.
+A Proxmox VE host accessible via SSH and the PVE API (see `defaults/main.yml`) with `become` privileges.
 
-The following python modules on the controller:
+The following python modules are required on the controller:
 - proxmoxer
 - requests
 Install via pip: `pip3 install proxmoxer requests`
@@ -38,16 +38,64 @@ None
 Example Playbook
 ----------------
 
+Generic example:
+
 ```
-- hosts: pve_host
+- hosts: all
   roles:
   - lxc_container:
+    # This role will connect to this PVE host for various tasks related to container setup
+    # Make sure that the pve_host (here: pve1.example.com) is present in your inventory
+    # and that ansible can connect via SSH (+ become) and via API
+    pve_host: pve1.example.com
+    pve_api_user: root@pam
+    pve_api_password: some-password
+    # Parameters for the container that you want to create
     lxccreate_hostname: a-hostname
     lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
     lxccreate_netif:
       net0: name=eth0,bridge=vmbr0,ip=192.168.1.10/24,gw=192.168.1.1,firewall=0
     lxccreate_password: a-root-password
 ```
+
+Creating a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
+
+Inventory:
+```
+all:
+  children:
+    containers:
+      hosts:
+        192.168.1.123:
+          # Variables unique to every container
+          lxccreate_hostname: ct-a
+          lxccreate_netif:
+            net0: name=eth0,bridge=vmbr0,ip=192.168.1.123/24,gw=192.168.1.1,firewall=0
+          ...
+        192.168.1.124:
+        ...
+      # Common variables shared between containers
+      lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
+      lxccreate_cores: 4
+      # PVE connection variables
+      pve_api_user: root@pam
+      pve_api_password: some-secret-password
+      pve_host: pve1.example.com
+      ...
+  hosts:
+    pve1.example.com:
+      # Parameters for the PVE API and SSH host.
+      ansible_user: root
+```
+
+```
+  # This will create a set of containers, with each container being a member of the `containers` group
+- hosts: containers
+  serial: 1 # Needed to prevent race conditions
+  roles:
+  - name: lxc_container
+```
+
 
 License
 -------

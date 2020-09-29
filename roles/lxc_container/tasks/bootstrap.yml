@@ -3,6 +3,7 @@
   register: pve_cluster_vms
   changed_when: no
   check_mode: no
+  become: yes
 - name: Get guest VMID
   set_fact:
     pve_current_vmid: '{{ (pve_cluster_vms.stdout | from_json | selectattr("name", "match", lxccreate_hostname) | map(attribute="vmid") | list).0 }}'
@@ -10,7 +11,10 @@
   copy:
     src: bootstrap-ct.sh
     dest: /tmp/bootstrap-ct.sh
+  become: yes
 - name: Copy bootstrap script to container # noqa 301
   command: 'pct push {{ pve_current_vmid }} /tmp/bootstrap-ct.sh /tmp/bootstrap-ct.sh --perms 777'
+  become: yes
 - name: Bootstrap container # noqa 301
   command: 'pct exec {{ pve_current_vmid }} /tmp/bootstrap-ct.sh'
+  become: yes

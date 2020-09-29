@@ -9,24 +9,9 @@
     lxcostemplate_storage_path: /mnt/pve/template/cache
   when: lxcostemplate_storage != "local"
 
-- name: Look for existing image
-  stat:
-    path: '{{ lxcostemplate_storage_path }}/{{ lxcostemplate_image }}.tar.gz'
-  register: lxcostemplate_existing_image
-  when: not lxcostemplate_overwrite
-
-- block:
-  - name: Get cluster VMs
-    command: pvesh get /cluster/resources -type vm --output-format json
-    register: cluster_vms
-    changed_when: no
-    check_mode: no
-    become: yes
-  - name: Get guest VMID
-    set_fact:
-      lxcostemplate_vmid: '{{ (cluster_vms.stdout | from_json | selectattr("name", "match", lxcostemplate_hostname) | map(attribute="vmid") | list).0 }}'
-  when: not lxcostemplate_vmid
-
+- include: prepare.yml
+  delegate_to: '{{ pve_host }}'
 - include: generate.yml
+  delegate_to: '{{ pve_host }}'
   when: (not lxcostemplate_overwrite and not lxcostemplate_existing_image.stat.exists) or
         lxcostemplate_overwrite
