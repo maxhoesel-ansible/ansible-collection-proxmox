@@ -27,6 +27,7 @@ Example Playbook
 
 ```
 - hosts: all
+  gather_facts: no
   roles:
   - role: lxc_container_to_ostemplate
     pve_host: mypvehost.example.com
@@ -55,6 +56,15 @@ all:
       lxcostemplate_storage: local
       pve_host: mypvehost.example.com
       ...
+```
+Playbook:
+```
+  # This will generate templates of containers, with each container being a member of the `containers` group
+- hosts: containers
+  serial: 1 # Needed to prevent race conditions
+  gather_facts: no
+  roles:
+  - name: lxc_container_to_ostemplate
 ```
 
 License
