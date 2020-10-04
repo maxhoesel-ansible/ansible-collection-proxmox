@@ -42,6 +42,7 @@ Generic example:
 
 ```
 - hosts: all
+  gather_facts: no
   roles:
   - lxc_container:
     # This role will connect to this PVE host for various tasks related to container setup
@@ -92,6 +93,7 @@ all:
   # This will create a set of containers, with each container being a member of the `containers` group
 - hosts: containers
   serial: 1 # Needed to prevent race conditions
+  gather_facts: no
   roles:
   - name: lxc_container
 ```
