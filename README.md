@@ -1,4 +1,4 @@
-# Ansible Collection - ariosthephoenix.proxmox
+# Ansible Collection - maxhoesel.proxmox
 
 A collection for managing Proxmox VE hosts and their guests.
 
@@ -19,7 +19,7 @@ Several roles in this collection require the `proxmoxer` and `requests` Python m
 
 - Installation with `pip` (venv recommended): `pip3 install proxomxer requests`
 
-To install this role: `ansible-galaxy collection install ariosthephoenix.proxmox`
+To install this role: `ansible-galaxy collection install maxhoesel.proxmox`
 
 # License
 
@@ -27,4 +27,4 @@ GNU GPL3 or later
 
 # Author
 
-Arios <ansible@arios.me>
+Max Hösel <ansible@maxhoesel.de>

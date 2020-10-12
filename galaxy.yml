@@ -3,13 +3,13 @@
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
 # content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
 # underscores or numbers and cannot contain consecutive underscores
-namespace: ariosthephoenix
+namespace: maxhoesel
 
 # The name of the collection. Has the same character restrictions as 'namespace'
 name: proxmox
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 2.0.0
+version: 2.0.1
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -17,7 +17,7 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Arios <ansible@arios.me>
+- Max Hösel <ansible@maxhoesel.de>
 
 
 ### OPTIONAL but strongly recommended
@@ -49,16 +49,16 @@ tags:
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://github.com/AriosThePhoenix/ansible-collection-proxmox
+repository: https://github.com/maxhoesel/ansible-collection-proxmox
 
 # The URL to any online docs
-documentation: https://github.com/AriosThePhoenix/ansible-collection-proxmox
+documentation: https://github.com/maxhoesel/ansible-collection-proxmox
 
 # The URL to the homepage of the collection/project
-homepage: https://github.com/AriosThePhoenix/ansible-collection-proxmox
+homepage: https://github.com/maxhoesel/ansible-collection-proxmox
 
 # The URL to the collection issue tracker
-issues: https://github.com/AriosThePhoenix/ansible-collection-proxmox/issues
+issues: https://github.com/maxhoesel/ansible-collection-proxmox/issues
 
 build_ignore:
 - .venv

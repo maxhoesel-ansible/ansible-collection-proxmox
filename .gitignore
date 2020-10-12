@@ -138,3 +138,6 @@ dmypy.json
 
 # ---> Ansible
 *.retry
+
+# Generated collection
+ariosthephoenix-proxmox-*.tar.gz
