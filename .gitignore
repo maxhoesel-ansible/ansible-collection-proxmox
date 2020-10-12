@@ -140,4 +140,4 @@ dmypy.json
 *.retry
 
 # Generated collection
-ariosthephoenix-proxmox-*.tar.gz
+*-proxmox-*.tar.gz
