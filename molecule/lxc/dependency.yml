@@ -18,6 +18,7 @@
     file:
       path: '{{ tmp_dir }}'
       state: directory
+      mode: 0750
   - name: Source repository is cloned
     git:
       repo: https://github.com/rgl/proxmox-ve.git
