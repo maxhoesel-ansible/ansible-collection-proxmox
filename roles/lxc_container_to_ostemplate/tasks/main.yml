@@ -6,7 +6,7 @@
   when: lxcostemplate_storage == "local"
 - name: Set storage basepath for non-local
   set_fact:
-    lxcostemplate_storage_path: /mnt/pve/template/cache
+    lxcostemplate_storage_path: '/mnt/pve/{{ lxcostemplate_storage }}/template/cache'
   when: lxcostemplate_storage != "local"
 
 - include: prepare.yml
