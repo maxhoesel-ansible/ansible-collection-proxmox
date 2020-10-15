@@ -9,7 +9,7 @@ namespace: maxhoesel
 name: proxmox
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 2.0.0
+version: 2.0.2
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -17,8 +17,8 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Max Hösel <git@maxhoesel.de>
 
+- Max Hösel <ansible@maxhoesel.de>
 
 ### OPTIONAL but strongly recommended
 

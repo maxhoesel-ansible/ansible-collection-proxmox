@@ -27,4 +27,4 @@ GNU GPL3 or later
 
 # Author
 
-Max Hösel <git@maxhoesel.de>
+Max Hösel <ansible@maxhoesel.de>
