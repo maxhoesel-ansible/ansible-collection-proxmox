@@ -5,7 +5,7 @@ dependency:
 
 lint: |
   set -e
-  ansible-lint roles/lxc_* molecule/**/*.yml
+  ansible-lint roles/lxc_* molecule/**/*.yml ./
   yamllint .
 
 driver:
