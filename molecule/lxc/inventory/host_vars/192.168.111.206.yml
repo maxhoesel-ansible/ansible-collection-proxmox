@@ -1,11 +1,3 @@
 lxccreate_hostname: template-archlinux
 lxccreate_ostemplate: local:vztmpl/archlinux-base_20200508-1_amd64.tar.gz
-lxccreate_netif:
-  # Host-only network for controller/PVE/Container communication (ansible-guests)
-  net0: name=eth0,bridge=vmbr0,ip=192.168.111.206/24,firewall=0
-  # Regular Virtualbox NAT for internet access (guests-NAT)
-  net1: name=eth1,bridge=vmbr1,ip=dhcp,firewall=0
-
-# Variables to use for the container created from the custom template
-lxccreate_custom_hostame: '{{ lxcostemplate_custom_prefix }}{{ lxccreate_hostname }}'
-lxccreate_custom_ostemplate: '{{ lxcostemplate_custom_prefix.split("/").0 }}/{{ lxcostemplate_custom_prefix }}{{ lxcostemplate_custom_prefix.split("/").1 }}'
+hostonly_ip: 192.168.111.206/24

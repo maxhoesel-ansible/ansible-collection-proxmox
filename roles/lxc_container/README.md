@@ -54,9 +54,6 @@ Generic example:
     # Parameters for the container that you want to create
     lxccreate_hostname: a-hostname
     lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
-    lxccreate_netif:
-      net0: name=eth0,bridge=vmbr0,ip=192.168.1.10/24,gw=192.168.1.1,firewall=0
-    lxccreate_password: a-root-password
 ```
 
 Creating a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
@@ -70,14 +67,13 @@ all:
         192.168.1.123:
           # Variables unique to every container
           lxccreate_hostname: ct-a
-          lxccreate_netif:
-            net0: name=eth0,bridge=vmbr0,ip=192.168.1.123/24,gw=192.168.1.1,firewall=0
           ...
         192.168.1.124:
         ...
       # Common variables shared between containers
       lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
-      lxccreate_cores: 4
+      lxccreate_args:
+        cores: 4
       # PVE connection variables
       pve_api_user: root@pam
       pve_api_password: some-secret-password
