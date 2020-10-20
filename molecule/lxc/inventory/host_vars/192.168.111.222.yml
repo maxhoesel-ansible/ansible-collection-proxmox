@@ -1,7 +1,3 @@
 lxccreate_hostname: '{{ lxcostemplate_custom_prefix }}centos-7'
 lxccreate_ostemplate: 'local:vztmpl/{{ lxcostemplate_custom_prefix }}centos-7-default_20190926_amd64.tar.gz'
-lxccreate_netif:
-  # Host-only network for controller/PVE/Container communication (ansible-guests)
-  net0: name=eth0,bridge=vmbr0,ip=192.168.111.222/24,firewall=0
-  # Regular Virtualbox NAT for internet access (guests-NAT)
-  net1: name=eth1,bridge=vmbr1,ip=dhcp,firewall=0
+hostonly_ip: 192.168.111.222/24

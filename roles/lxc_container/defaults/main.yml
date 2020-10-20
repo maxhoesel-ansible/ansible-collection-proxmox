@@ -1,44 +1,46 @@
 ---
 # This role needs API and SSH access to a PVE node with become privileges
 # in order to create a container. Please set pve_host to the corresponding
-# inventory hostname
+# host present in the inventory
 pve_host: pve.example.com
 pve_api_host: '{{ pve_host }}'
 pve_api_user: root@pam
 pve_api_password: mypassword
 
-# The parameters of the container. See
-# https://docs.ansible.com/ansible/latest/modules/proxmox_module.html
-# for details about each parameter
-# The PVE node to create the container on
-lxccreate_node: pve # Must be the same as the host that the role is executed on
+# Hostname of the new container
 lxccreate_hostname: my-container
-lxccreate_cores: 1
-lxccreate_cpus: 1
-lxccreate_cpuunits: 1024
-lxccreate_memory: 1024
-lxccreate_swap: 0
-lxccreate_disk: "10"
-lxccreate_storage: local-lvm
-lxccreate_mounts: {}
-lxccreate_onboot: no
-# Use this ostemplate (base image) to create the container
-lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
+lxccreate_ostemplate: 'local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
 # Automatically download the specified base template from the PVE repository if the image is not present
 lxccreate_ostemplate_download: yes
-# Dict of network interfaces. See the PVE API for all valid parameters
-# https://pve.proxmox.com/pve-docs/api-viewer/index.html#/nodes/{node}/lxc
-lxccreate_netif:
-  net0: name=eth0,bridge=vmbr0,ip=192.168.1.10/24,gw=192.168.1.1,firewall=0
-lxccreate_nameserver: "8.8.8.8,8.8.4.4"
-lxccreate_searchdomain: "localdomain"
-lxccreate_password: a-secret-password
-lxccreate_pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
-lxccreate_unprivileged: yes
+
+# Additional arguments to be passed to the proxmox module
+# for when creating the container. See
+# https://docs.ansible.com/ansible/latest/modules/proxmox_module.html
+# for details about each parameter
+lxccreate_args:
+  node: pve
+  cores: 1
+  #cpus: 1
+  cpuunits: 1024
+  memory: 1024
+  swap: 0
+  disk: "10"
+  storage: local-lvm
+  #mounts: {}
+  onboot: no
+  # Dict of network interfaces. See the PVE API for all valid parameters
+  # https://pve.proxmox.com/pve-docs/api-viewer/index.html#/nodes/{node}/lxc
+  netif:
+    net0: name=eth0,bridge=vmbr0,ip=dhcp,firewall=0
+  #nameserver: "8.8.8.8,8.8.4.4"
+  #searchdomain: "localdomain"
+  #password: a-secret-password # Uncomment if you want a root password
+  pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
+  unprivileged: yes
 
 # Increase this value if you are experiencing timeout errors during PVE API tasks
 lxccreate_timeout: 120
 
-# Set this to no if you want to skip bootstrapping the container
-# (ssh server, python)
+# Set this to yes to run a simple bootstrap script on the container after creation.
+# The script will prepare the container for Ansible (SSH server + Python)
 lxccreate_bootstrap: yes
