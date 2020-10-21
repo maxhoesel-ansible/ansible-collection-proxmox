@@ -6,21 +6,24 @@ pve_api_password: '{{ hostvars["pve"]["pve_root_password"] }}'
 # Prefix to differentiate between the provided and our generated template images
 lxcostemplate_custom_prefix: custom-
 
-lxccreate_node: pve # Must be the same as the host that the role is executed on
-lxccreate_cores: 2
-lxccreate_cpus: 1
-lxccreate_cpuunits: 1024
-lxccreate_memory: 1024
-lxccreate_swap: 0
-lxccreate_disk: "10"
-lxccreate_storage: local-lvm
-lxccreate_mounts: {}
-lxccreate_onboot: no
+lxccreate_args:
+  node: pve # Must be the same as the host that the role is executed on
+  cores: 2
+  cpuunits: 1024
+  memory: 1024
+  swap: 0
+  disk: "10"
+  storage: local-lvm
+  nameserver: "8.8.8.8,8.8.4.4"
+  searchdomain: "localdomain"
+  pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
+  unprivileged: yes
+  timeout: 120
+  netif:
+    # Host-only network for controller/PVE/Container communication (ansible-guests)
+    net0: 'name=eth0,bridge=vmbr0,ip={{ hostonly_ip }},firewall=0'
+    # Regular Virtualbox NAT for internet access (guests-NAT)
+    net1: name=eth1,bridge=vmbr1,ip=dhcp,firewall=0
+
 lxccreate_ostemplate_download: yes
-lxccreate_nameserver: "8.8.8.8,8.8.4.4"
-lxccreate_searchdomain: "localdomain"
-lxccreate_password: a-secret-password
-lxccreate_pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
-lxccreate_unprivileged: yes
-lxccreate_timeout: 120
 lxccreate_bootstrap: yes

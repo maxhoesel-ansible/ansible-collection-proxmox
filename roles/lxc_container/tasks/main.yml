@@ -1,4 +1,17 @@
 ---
+- name: Generate module argument dict [1/2]
+  set_fact:
+    lxccreate_special_args:
+      api_host: '{{ pve_api_host }}'
+      api_user: '{{ pve_api_user }}'
+      api_password: '{{ pve_api_password }}'
+      hostname: '{{ lxccreate_hostname }}'
+      ostemplate: '{{ lxccreate_ostemplate }}'
+      timeout:  '{{ lxccreate_timeout }}'
+- name: Generate module argument dict [2/2]
+  set_fact:
+    lxccreate_module_args: '{{ lxccreate_args | combine(lxccreate_special_args) }}'
+
 - include: ostemplate.yml
   delegate_to: '{{ pve_host }}'
 - include: provision.yml

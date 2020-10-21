@@ -11,6 +11,7 @@
   copy:
     src: bootstrap-ct.sh
     dest: /tmp/bootstrap-ct.sh
+    mode: 0755
   become: yes
 - name: Copy bootstrap script to container # noqa 301
   command: 'pct push {{ pve_current_vmid }} /tmp/bootstrap-ct.sh /tmp/bootstrap-ct.sh --perms 777'

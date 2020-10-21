@@ -9,6 +9,7 @@
     template:
       src: interfaces.j2
       dest: /etc/network/interfaces
+      mode: 0644
     become: yes
   - name: Restart networking
     service:

@@ -9,7 +9,7 @@ namespace: maxhoesel
 name: proxmox
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 2.0.2
+version: 3.0.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -18,7 +18,6 @@ readme: README.md
 # @nicks:irc/im.site#channel'
 authors:
 - Max Hösel <ansible@maxhoesel.de>
-
 
 ### OPTIONAL but strongly recommended
 
