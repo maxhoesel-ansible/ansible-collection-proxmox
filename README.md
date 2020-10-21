@@ -2,6 +2,8 @@
 
 A collection for managing Proxmox VE hosts and their guests.
 
+NOTE: The collection hosted at Galaxy is currently outdated due to [this issue.](https://github.com/ansible/galaxy/issues/2519) As a workaround, you can download the tar.gz file from a release or link to this repository in your requirements file
+
 Currently contains the following components:
 
 #### Roles
