@@ -11,7 +11,7 @@ Currently contains the following components:
 
 #### Modules
 
-Nothing so far
+- ha: Manage a hosts HA settings
 
 # Requirements & Installation
 
