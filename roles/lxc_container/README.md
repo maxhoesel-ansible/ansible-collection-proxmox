@@ -18,11 +18,18 @@ Other distributions should work as well, as long as they:
 Requirements
 ------------
 
-A Proxmox VE host accessible via SSH and the PVE API (see `defaults/main.yml`) with `become` privileges.
+### Proxmox Host
+
+To execute this role, Ansible needs to access the Proxmox host on which the container will be created.
+To speficy the host, set `pve_host` to the hots' inventory name. If you don't want to add the host
+to your inventory file, you can also add it at runtime with the `add_host` module - see [here for an example.](#with-a-dynamic-pve-host)
+
+### Controller
 
 The following python modules are required on the controller:
 - proxmoxer
 - requests
+
 Install via pip: `pip3 install proxmoxer requests`
 
 Role Variables
@@ -35,10 +42,10 @@ Dependencies
 
 None
 
-Example Playbook
+Example Playbooks
 ----------------
 
-Generic example:
+### Basic example
 
 ```
 - hosts: all
@@ -56,7 +63,36 @@ Generic example:
     lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
 ```
 
-Creating a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
+### With a dynamic pve host
+
+If you don't want to clutter your inventory with the PVE host, you can just add it dynamically like so:
+
+```
+- hosts: all
+  gather_facts: no
+  pre_tasks:
+  - name: Add PVE host to runtime inventory
+    add_host:
+      hostname: pve1.example.com
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_user: ansible
+  roles:
+  - lxc_container:
+    # This role will connect to this PVE host for various tasks related to container setup
+    # Make sure that the pve_host (here: pve1.example.com) is present in your inventory
+    # and that ansible can connect via SSH (+ become) and via API
+    pve_host: pve1.example.com
+    pve_api_user: root@pam
+    pve_api_password: some-password
+    # Parameters for the container that you want to create
+    lxccreate_hostname: a-hostname
+    lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
+  
+```
+
+### Batch creation
+
+Creating a batch of containers based on an inventory is also possible using a customized inventory. An example is show here:
 
 Inventory:
 ```
@@ -74,7 +110,7 @@ all:
       lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
       lxccreate_args:
         cores: 4
-      # PVE connection variables
+      # PVE connection variables shared between containers
       pve_api_user: root@pam
       pve_api_password: some-secret-password
       pve_host: pve1.example.com
@@ -83,6 +119,7 @@ all:
     pve1.example.com:
       # Parameters for the PVE API and SSH host.
       ansible_user: root
+      ansible_python_interpreter: /usr/bin/python3
 ```
 
 ```
