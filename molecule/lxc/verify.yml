@@ -14,15 +14,13 @@
   - name: ../../roles/lxc_container
     lxccreate_bootstrap: no
     lxccreate_ostemplate_download: no
-  post_tasks:
-  - name: Wait for containers to start
-    pause:
-      seconds: 30
 
 - name: Verify new containers
   hosts: custom_containers
   remote_user: root
   gather_facts: no
   tasks:
+  - name: Wait for containers to start
+    wait_for_connection:
   - name: Verify connection and Ansible execution on containers from ostemplate
     setup:
