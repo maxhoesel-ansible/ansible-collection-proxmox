@@ -10,7 +10,11 @@ This role performs the following actions:
 Requirements
 ------------
 
-A Proxmox VE host accessible via SSH and the PVE API that is running the target container (see `defaults/main.yml`) with `become` privileges.
+### Proxmox Host
+
+To execute this role, Ansible needs to access the Proxmox host on which the container image will be created.
+To speficy the host, set `pve_host` to the hots' inventory name. If you don't want to add the host
+to your inventory file, you can also add it at runtime with the `add_host` module - see [here for an example.](#with-a-dynamic-pve-host)
 
 Role Variables
 --------------
@@ -25,19 +29,44 @@ None
 Example Playbook
 ----------------
 
+### Simple
+
 ```
 - hosts: all
   gather_facts: no
   roles:
   - role: lxc_container_to_ostemplate
-    pve_host: mypvehost.example.com
-    pve_ssh_user: root
+    # Make sure that the PVE host is present in your inventory
+    pve_host: pve1.example.com
     lxcostemplate_hostname: ubuntu-18-04
     lxcostemplate_image: custom-ubuntu-18-04
     lxcostemplate_storage: local
 ```
 
-Creating a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
+### With a dynamic pve host
+
+If you don't want to clutter your inventory with the PVE host, you can just add it dynamically like so:
+
+```
+- hosts: all
+  gather_facts: no
+  pre_tasks:
+  - name: Add PVE host to runtime inventory
+    add_host:
+      hostname: pve1.example.com
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_user: ansible
+  roles:
+  - role: lxc_container_to_ostemplate
+    pve_host: pve1.example.com
+    lxcostemplate_hostname: ubuntu-18-04
+    lxcostemplate_image: custom-ubuntu-18-04
+    lxcostemplate_storage: local
+```
+
+### Batch Conversion
+
+Converting a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
 
 Inventory:
 ```
@@ -54,7 +83,10 @@ all:
         ...
       # Common variables shared between containers
       lxcostemplate_storage: local
-      pve_host: mypvehost.example.com
+      pve_host: pve1.example.com
+  pve:
+    pve1.example.com:
+      ansible_user: ansible
       ...
 ```
 Playbook:
