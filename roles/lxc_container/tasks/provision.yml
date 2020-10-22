@@ -2,6 +2,7 @@
   proxmox: '{{ lxccreate_module_args }}'
   delegate_to: localhost
   register: pve_lxccreate_task
+  throttle: 1
 - name: Wait for PVE API sync
   pause:
     seconds: 10
@@ -12,4 +13,5 @@
     api_password: '{{ pve_api_password }}'
     hostname: '{{ lxccreate_hostname }}'
     state: started
+  throttle: 1
   delegate_to: localhost

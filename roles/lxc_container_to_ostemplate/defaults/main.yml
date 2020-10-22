@@ -5,7 +5,6 @@
 # Note that the target container *must* be running on this host.
 # The host must also have access to the storage defined in lxcostemplate_storage
 pve_host: pve.example.com
-pve_ssh_user: root
 
 # Set either the hostname or the vmid of the container to convert into a template.
 # If both are set, the vmid will take precedence
