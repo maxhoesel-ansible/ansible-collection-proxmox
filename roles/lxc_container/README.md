@@ -88,7 +88,6 @@ all:
 ```
   # This will create a set of containers, with each container being a member of the `containers` group
 - hosts: containers
-  serial: 1 # Needed to prevent race conditions
   gather_facts: no
   roles:
   - name: lxc_container
