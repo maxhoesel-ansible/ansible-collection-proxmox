@@ -10,7 +10,6 @@
 - name: Create containers from generated ostemplates
   hosts: custom_containers
   gather_facts: no
-  serial: 1
   roles:
   - name: ../../roles/lxc_container
     lxccreate_bootstrap: no

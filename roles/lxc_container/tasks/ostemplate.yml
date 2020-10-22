@@ -19,6 +19,7 @@
     changed_when: no
     check_mode: no
     become: yes
+    run_once: yes
   - name: Download required ostemplate
     command: 'pveam download {{ pve_ostemplate_storage }} {{ lxccreate_ostemplate.split("/")[1] }}'
     become: yes
