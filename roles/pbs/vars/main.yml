@@ -1,0 +1,4 @@
+pbs_repo_names:
+  no-subscription: pbs-no-subscription
+  enterprise: pbs-enterprise
+  test: pbstest

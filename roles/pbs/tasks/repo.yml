@@ -1,0 +1,21 @@
+- name: "{{ pbs_repo_type }} is enabled"
+  apt_repository:
+    repo: "deb http://download.proxmox.com/debian/pbs {{ ansible_distribution_release }} {{ pbs_repo_names[pbs_repo_type] }}"
+    filename: "{{ pbs_repo_names[pbs_repo_type] }}"
+    update_cache: no
+
+- name: Get other repositories
+  set_fact:
+    _pbs_disable_repos: "{{ pbs_repo_names.keys() | difference([pbs_repo_type]) }}"
+
+- name: Other repositories are disabled
+  apt_repository:
+    repo: "deb http://download.proxmox.com/debian/pbs {{ ansible_distribution_release }} {{ pbs_repo_names[item] }}"
+    state: absent
+    filename: "{{ pbs_repo_names[item] }}"
+    update_cache: no
+  loop: "{{ _pbs_disable_repos }}"
+
+- name: Update APT cache
+  apt:
+    update_cache: yes

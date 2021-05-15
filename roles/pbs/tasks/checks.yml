@@ -1,0 +1,6 @@
+- name: Verify required variables are valid
+  assert:
+    that:
+      - pbs_root_password is defined
+      - pbs_root_password | length >= 8
+      - pbs_repo_type in ["no-subscription", "enterprise", "testing"]
