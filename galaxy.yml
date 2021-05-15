@@ -9,7 +9,7 @@ namespace: maxhoesel
 name: proxmox
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 3.1.0
+version: 3.2.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -17,35 +17,36 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Max Hösel <ansible@maxhoesel.de>
+  - Max Hösel <ansible@maxhoesel.de>
 
 ### OPTIONAL but strongly recommended
 
 # A short summary description of the collection
-description: Roles related to managing Proxmox PVE nodes and guests
+description: Collection dealing with Proxmox VE and BS hosts
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
-- GPL-3.0-or-later
+  - GPL-3.0-or-later
 
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'
-license_file: ''
+license_file: ""
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
 tags:
-- "proxmox"
-- "lxc"
-- "kvm"
-- "virtualization"
+  - "proxmox"
+  - "lxc"
+  - "kvm"
+  - "virtualization"
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
-dependencies: {}
+dependencies:
+  "ansible.posix": ">=1.0,<2.0"
 
 # The URL of the originating SCM repository
 repository: https://github.com/maxhoesel/ansible-collection-proxmox
@@ -60,4 +61,4 @@ homepage: https://github.com/maxhoesel/ansible-collection-proxmox
 issues: https://github.com/maxhoesel/ansible-collection-proxmox/issues
 
 build_ignore:
-- .venv
+  - .venv
