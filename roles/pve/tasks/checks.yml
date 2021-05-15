@@ -1,0 +1,6 @@
+- name: Verify required variables are valid
+  assert:
+    that:
+      - pve_root_password is defined
+      - pve_root_password | length >= 8
+      - pve_repo_type in ["no-subscription", "enterprise", "testing"]

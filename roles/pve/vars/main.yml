@@ -1,0 +1,4 @@
+pve_repo_names:
+  no-subscription: pve-no-subscription
+  enterprise: pve-enterprise
+  test: pvetest
