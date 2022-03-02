@@ -1,0 +1,3 @@
+# {{ ansible_managed }}
+
+DEVICESCAN -a -o on -S on -d removable -n standby,q -s {{ pbs_smartd_test_schedule}} -W 4,{{ pbs_smartd_temperature_warn - 5 }},{{ pbs_smartd_temperature_warn }} -m {{ pbs_smartd_mail }} -M exec /usr/share/smartmontools/smartd-runner

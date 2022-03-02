@@ -13,3 +13,5 @@
     password: "{{ pbs_root_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
 
 - include_tasks: repo.yml
+
+- include_tasks: smartd.yml

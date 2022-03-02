@@ -1,0 +1,8 @@
+- name: smartd config is insatlled
+  ansible.builtin.template:
+    src: smartd.conf.j2
+    dest: /etc/smartd.conf
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart smartd

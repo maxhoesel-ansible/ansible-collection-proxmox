@@ -141,3 +141,5 @@ dmypy.json
 
 # Generated collection
 *-proxmox-*.tar.gz
+
+.vscode

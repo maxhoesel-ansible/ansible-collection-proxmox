@@ -1,2 +1,7 @@
 #pbs_root_password:
 pbs_repo_type: no-subscription
+
+pbs_configure_smartd: false
+pbs_smartd_mail: root
+pbs_smartd_temperature_warn: 40
+pbs_smartd_test_schedule: "(S/../.././02|L/../../6/03)"
