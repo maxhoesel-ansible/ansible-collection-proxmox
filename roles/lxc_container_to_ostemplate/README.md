@@ -31,7 +31,7 @@ Example Playbook
 
 ### Simple
 
-```
+```yaml
 - hosts: all
   gather_facts: no
   roles:
@@ -69,7 +69,7 @@ If you don't want to clutter your inventory with the PVE host, you can just add 
 Converting a batch of containers based on an inventory is also possible using a customized inventory. An example layout is show below:
 
 Inventory:
-```
+```yaml
 all:
   children:
     containers:
@@ -90,7 +90,7 @@ all:
       ...
 ```
 Playbook:
-```
+```yaml
   # This will generate templates of containers, with each container being a member of the `containers` group
 - hosts: containers
   gather_facts: no

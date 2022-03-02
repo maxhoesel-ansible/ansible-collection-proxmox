@@ -1,6 +1,6 @@
 # Ansible Collection - maxhoesel.proxmox
 
-A collection for managing Proxmox VE hosts and their guests.
+A collection for managing Proxmox VE and Backup Server hosts.
 
 Currently contains the following components:
 
@@ -8,6 +8,8 @@ Currently contains the following components:
 
 - lxc_container: Creates and bootstraps LXC containers for Ansible access
 - lxc_container_to_ostemplate: Generates a ostemplate image from an existing container
+- pve: Perform basic system-level setup tasks on PVE nodes (such as setting the PVE repository and configuring the root user)
+- pbs: Perform basic system-level setup tasks on Proxmox Backup Server hosts (such as setting the PBS repository and configuring the root user + S.M.A.R.T)
 
 #### Modules
 

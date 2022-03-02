@@ -47,7 +47,7 @@ Example Playbooks
 
 ### Basic example
 
-```
+```yaml
 - hosts: all
   gather_facts: no
   roles:
@@ -67,7 +67,7 @@ Example Playbooks
 
 If you don't want to clutter your inventory with the PVE host, you can just add it dynamically like so:
 
-```
+```yaml
 - hosts: all
   gather_facts: no
   pre_tasks:
@@ -87,7 +87,7 @@ If you don't want to clutter your inventory with the PVE host, you can just add 
     # Parameters for the container that you want to create
     lxccreate_hostname: a-hostname
     lxccreate_ostemplate: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
-  
+
 ```
 
 ### Batch creation
@@ -95,7 +95,7 @@ If you don't want to clutter your inventory with the PVE host, you can just add 
 Creating a batch of containers based on an inventory is also possible using a customized inventory. An example is show here:
 
 Inventory:
-```
+```yaml
 all:
   children:
     containers:
@@ -122,7 +122,7 @@ all:
       ansible_python_interpreter: /usr/bin/python3
 ```
 
-```
+```yaml
   # This will create a set of containers, with each container being a member of the `containers` group
 - hosts: containers
   gather_facts: no
