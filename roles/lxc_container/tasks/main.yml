@@ -1,11 +1,4 @@
 ---
-- name: Show deprecation warning
-  fail:
-    msg: >
-      [DEPRECATION WARNING] This role is not actively maintained anymore and will be removed in release 4.0 of this collection.
-      It is recommended that you switch your existing playbooks to proxmox modules, or pin your collection dependency at <4.0.
-  ignore_errors: true
-
 - name: Generate module argument dict [1/2]
   set_fact:
     lxccreate_special_args:

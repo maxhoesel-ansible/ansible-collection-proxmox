@@ -22,6 +22,12 @@ the underlying system and platform (such as the root user and proxmox repository
 - Please note that this role does not configure your subscription key, you will have to do so yourself
 - Default: `no-subscription`
 
+##### `pbs_configure_smart`
+
+
+##### `pbs_smart_temperature_warn`
+- Hard disk temperature at which the S.M.A.R.T
+
 ## Example Playbook
 - hosts: pbs
   become: yes
