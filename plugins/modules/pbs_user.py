@@ -41,12 +41,10 @@ options:
         Password for the user. Note that this module does B(not) update the password by default!
         To force this behavior (this also causes the module to always return as changed), set I(password_update) to True
     type: str
-    no_log: yes
   password_update:
     description: Whether to force update the password of an existing user
     type: bool
     default: no
-    no_log: no
     aliases:
       - update_password
   state:

@@ -5,9 +5,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
-from ansible.module_utils.basic import AnsibleModule
-import re
-import os
+
 __metaclass__ = type
 
 
@@ -22,46 +20,61 @@ module: proxmox_ha
 short_description: Manage HA in a Proxmox cluster
 description:
   - Manage the HA status/membership of individual guests in a Proxmox VE cluster
-version_added: "2.8"
-author: "Max Hösel < ansible @ maxhoesel.de >"
+version_added: "2.8.0"
+author: Max Hösel (@maxhoesel)
 options:
   comment:
     description:
       - Add a comment to the HA resource. This comment is not parsed and is only used for documentation.
+    type: str
   digest:
     description:
       - Specify if to prevent changes if current configuration file has different SHA1 digest.
       - This can be used to prevent concurrent modifications.
+    type: str
   group:
     description:
       - Specify the HA group that the guest should be a member of
+    type: str
   max_relocate:
     description:
       - Specify the maximum number of relocates to attempt before a service is considered "failed"
+    type: int
   max_restart:
     description:
       - Specify the maximum number of restarts to attempt before a service is considered "failed"
+    type: int
   name:
     description:
         - Specify the name of the guest whose HA resource will be modified.
         - Automatically fetches the correct VMID.
         - You can also specify the VMID directly using C(vmid).
+    type: str
   state:
     description:
-      - C(present): Alias for C(started)
-      - C(absent): Will remove the HA resource if present
-      - C(started)/C(stopped)/C(disabled)/C(ignored): Will configure the resource and set the PVE HA state to the requested value
-      - For more information on the individual states, please refer to the PVE documentaiton
-    default: present
+      - "C(present): Alias for C(started)"
+      - "C(absent): Will remove the HA resource if present"
+      - "C(started)/C(stopped)/C(disabled)/C(ignored): Will configure the resource and set the PVE HA state to the requested value"
+      - "For more information on the individual states, please refer to the PVE documentation"
+    default: started
+    type: str
+    choices:
+      - present
+      - absent
+      - started
+      - stopped
+      - disabled
+      - ignored
   vmid:
     description:
       - Specify the VMID of the guest whose HA resource will be modified. Will be fetched automatically if C(name) is set.
+    type: int
 
 extends_documentation_fragment:
   - maxhoesel.proxmox.api_connection
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 # Create a basic HA resource for a guest (and ensure that the guest is started)
 - proxmox_ha:
     api_user    : root@pam
@@ -86,6 +99,11 @@ EXAMPLES = """
     state       : absent
 """
 
+import re
+import os
+
+from ansible.module_utils.basic import AnsibleModule
+
 from ..module_utils.api_connection import api_connection_argspec
 
 try:
@@ -98,19 +116,22 @@ except ImportError:
 def main():
     m = AnsibleModule(
         argument_spec={**dict(
-            comment=dict(),
-            digest=dict(),
-            group=dict(),
+            comment=dict(type="str"),
+            digest=dict(type="str"),
+            group=dict(type="str"),
             max_relocate=dict(type="int"),
             max_restart=dict(type="int"),
-            name=dict(),
+            name=dict(type="str"),
             state=dict(choices=["present", "absent", "started",
                                 "stopped", "disabled", "ignored"], default="started"),
-            vmid=dict(),
+            vmid=dict(type="int"),
         ), **api_connection_argspec},
         required_one_of=[("name", "vmid",)],
         supports_check_mode=True
     )
+
+    if m.params["state"] == "present":
+        m.params["state"] = "started"
 
     if not HAS_PROXMOXER:
         m.fail_json(
