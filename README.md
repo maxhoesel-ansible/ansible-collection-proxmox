@@ -17,6 +17,8 @@ Currently contains the following components:
 
 # Requirements & Installation
 
+The modules in this collection are written for Python 3.6 or newer.
+
 Several roles in this collection require the `proxmoxer` and `requests` Python module.
 
 - Installation with `pip` (venv recommended): `pip3 install proxomxer requests`
