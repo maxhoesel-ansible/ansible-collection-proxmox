@@ -1,3 +1,0 @@
-lxccreate_hostname: template-suse-15-2
-lxccreate_ostemplate: local:vztmpl/opensuse-15.2-default_20200824_amd64.tar.xz
-hostonly_ip: 192.168.111.205/24

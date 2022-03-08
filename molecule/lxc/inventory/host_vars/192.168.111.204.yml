@@ -1,3 +1,0 @@
-lxccreate_hostname: template-fedora-32
-lxccreate_ostemplate: local:vztmpl/fedora-32-default_20200430_amd64.tar.xz
-hostonly_ip: 192.168.111.204/24

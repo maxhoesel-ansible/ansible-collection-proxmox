@@ -1,3 +1,0 @@
-lxccreate_hostname: '{{ lxcostemplate_custom_prefix }}debian-10'
-lxccreate_ostemplate: 'local:vztmpl/{{ lxcostemplate_custom_prefix }}debian-10-standard_10.5-1_amd64.tar.gz'
-hostonly_ip: 192.168.111.223/24

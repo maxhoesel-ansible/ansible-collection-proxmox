@@ -1,3 +1,0 @@
-lxccreate_hostname: '{{ lxcostemplate_custom_prefix }}alpine-3-12'
-lxccreate_ostemplate: 'local:vztmpl/{{ lxcostemplate_custom_prefix }}alpine-3.12-default_20200823_amd64.tar.gz'
-hostonly_ip: 192.168.111.227/24

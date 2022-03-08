@@ -1,9 +1,0 @@
----
-- name: Converge
-  hosts: containers
-  gather_facts: no
-  roles:
-    - name: ../../roles/lxc_container
-    - name: ../../roles/lxc_container_to_ostemplate
-      lxcostemplate_hostname: '{{ lxccreate_hostname }}'
-      lxcostemplate_image: '{{ lxcostemplate_custom_prefix }}{{ lxccreate_ostemplate.split("/").1.split(".tar").0 }}'
