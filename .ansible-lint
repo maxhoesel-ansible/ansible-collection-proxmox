@@ -4,5 +4,5 @@ offline: true
 exclude_paths:
   - tests/integration/targets/
   - .github/
-  - .chlog/
+  - .chglog/
   - .pre-commit-config.yaml
