@@ -43,7 +43,9 @@ options:
       - Specify the maximum number of restarts to attempt before a service is considered "failed"
   name:
     description:
-      - Specify the name of the guest whose HA resource will be modified. Automatically fetches the correct VMID. You can also specify the VMID directly using C(vmid).
+        - Specify the name of the guest whose HA resource will be modified.
+        - Automatically fetches the correct VMID.
+        - You can also specify the VMID directly using C(vmid).
   state:
     description:
       - C(present): Alias for C(started)

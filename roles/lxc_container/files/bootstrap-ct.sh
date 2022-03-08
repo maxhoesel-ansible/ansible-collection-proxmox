@@ -33,6 +33,7 @@ init_pacman () {
     # The default arch image comes with pacman unconfigured. For the purposes of
     # bootstrapping, we first enable a temporary server, before then initializing
     # pacmans keyring and installing rankmirrors to generate a mirrorlist.
+    # shellcheck disable=SC2016
     sed -i 's!#Server = http://mirror.rackspace.com/archlinux/$repo/os/$arch!Server = http://mirror.rackspace.com/archlinux/$repo/os/$arch!' /etc/pacman.d/mirrorlist
     pacman-key --init
     pacman-key --populate archlinux
@@ -46,31 +47,31 @@ init_pacman () {
 }
 
 # Debian
-if type apt; then
+if command -v apt; then
     try "apt update" "$MAX_TRIES" "$TRY_WAIT"
     try "apt install -y openssh-server python3" "$MAX_TRIES" "$TRY_WAIT"
     enable_systemd ssh
 # Fedora and EL >=8
 # We check dnf first, as CentOS8 comes with both dnf and yum.
 # This way, we always install python3 on hosts that support it
-elif type dnf; then
+elif command -v dnf; then
     try "dnf install -y openssh-server python3" "$MAX_TRIES" "$TRY_WAIT"
     enable_systemd sshd
 # EL <=7
-elif type yum; then
+elif command -v yum; then
     try "yum install -y openssh-server python" "$MAX_TRIES" "$TRY_WAIT"
     enable_systemd sshd
 # Archlinux
-elif type pacman; then
+elif command -v pacman; then
     init_pacman
     try "pacman -S openssh python --noconfirm" "$MAX_TRIES" "$TRY_WAIT"
     enable_systemd sshd
 # Suse
-elif type zypper; then
+elif command -v zypper; then
     try "zypper install -y openssh python3" "$MAX_TRIES" "$TRY_WAIT"
     enable_systemd sshd
 # Alpine
-elif type apk; then
+elif command -v apk; then
     try "apk update" "$MAX_TRIES" "$TRY_WAIT"
     try "apk add openssh-server openssh-client python3" "$MAX_TRIES" "$TRY_WAIT"
     rc-update add sshd
