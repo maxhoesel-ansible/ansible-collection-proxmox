@@ -20,7 +20,7 @@
     check_mode: no
     become: yes
     run_once: yes
-  - name: Download required ostemplate
+  - name: Download required ostemplate # noqa no-changed-when
     command: 'pveam download {{ pve_ostemplate_storage }} {{ lxccreate_ostemplate.split("/")[1] }}'
     become: yes
   when: lxccreate_ostemplate_download and not lxccreate_ostemplate in pve_existing_ostemplates.stdout_lines
