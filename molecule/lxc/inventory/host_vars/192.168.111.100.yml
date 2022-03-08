@@ -1,6 +1,0 @@
-# We contact the PVE host via this IP address, but molecule/vagrant sees it as "pve",
-# as explained in the README. We can simply reuse the hostvars from each other though, so it's
-# no big deal
-
-ansible_user: root
-ansible_ssh_pass: '{{ hostvars["pve"]["pve_root_password"] }}'

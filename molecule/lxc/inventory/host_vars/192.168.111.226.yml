@@ -1,3 +1,0 @@
-lxccreate_hostname: '{{ lxcostemplate_custom_prefix }}archlinux'
-lxccreate_ostemplate: 'local:vztmpl/{{ lxcostemplate_custom_prefix }}archlinux-base_20200508-1_amd64.tar.gz'
-hostonly_ip: 192.168.111.226/24

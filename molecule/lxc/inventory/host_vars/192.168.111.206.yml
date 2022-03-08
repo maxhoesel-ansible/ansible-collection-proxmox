@@ -1,3 +1,0 @@
-lxccreate_hostname: template-archlinux
-lxccreate_ostemplate: local:vztmpl/archlinux-base_20200508-1_amd64.tar.gz
-hostonly_ip: 192.168.111.206/24

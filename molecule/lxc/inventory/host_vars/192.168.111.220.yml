@@ -1,3 +1,0 @@
-lxccreate_hostname: '{{ lxcostemplate_custom_prefix }}ubuntu-20-04'
-lxccreate_ostemplate: 'local:vztmpl/{{ lxcostemplate_custom_prefix }}ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
-hostonly_ip: 192.168.111.220/24

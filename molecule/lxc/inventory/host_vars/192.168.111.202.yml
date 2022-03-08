@@ -1,3 +1,0 @@
-lxccreate_hostname: template-centos-7
-lxccreate_ostemplate: local:vztmpl/centos-7-default_20190926_amd64.tar.xz
-hostonly_ip: 192.168.111.202/24

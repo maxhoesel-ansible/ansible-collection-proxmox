@@ -1,3 +1,0 @@
-lxccreate_hostname: template-alpine-3-12
-lxccreate_ostemplate: local:vztmpl/alpine-3.12-default_20200823_amd64.tar.xz
-hostonly_ip: 192.168.111.207/24
