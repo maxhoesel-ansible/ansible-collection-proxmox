@@ -57,7 +57,8 @@ options:
       - present
       - absent
   userid:
-    description: User ID, in the format "user@realm". Example: john@pbs
+    description: >
+        User ID, in the format "user@realm". Example: john@pbs
     aliases:
       - name
       - id
@@ -165,8 +166,11 @@ def main():
         userid=dict(type="str", required=True, aliases=["name", "id"])
     )
     result = dict(changed=False, msg="")
-    module = AnsibleModule(argument_spec={**module_args, **
-                           api_connection_argspec}, supports_check_mode=True, required_if=[("password_update", True, ["password"])])
+    module = AnsibleModule(
+        argument_spec={**module_args, **api_connection_argspec},
+        supports_check_mode=True,
+        required_if=[("password_update", True, ["password"])]
+    )
 
     if not HAS_PROXMOXER:
         result["msg"] = "This module requires proxmoxer >=1.2. Please install it with pip"
@@ -176,7 +180,10 @@ def main():
         try:
             module.params["api_password"] = os.environ["PROXMOX_PASSWORD"]
         except KeyError:
-            result["msg"] = "Neither api_password nor the PROXMOX_PASSWORD enviroment variable are set. Please specify a password for connecting to the PVE cluster"
+            result["msg"] = (
+                "Neither api_password nor the PROXMOX_PASSWORD enviroment variable are set. "
+                "Please specify a password for connecting to the PVE cluster"
+            )
             module.fail_json(**result)
 
     try:
