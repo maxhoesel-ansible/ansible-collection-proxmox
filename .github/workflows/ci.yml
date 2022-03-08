@@ -1,0 +1,53 @@
+---
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Set up pip
+        run: pip3 install --upgrade pip
+
+      - name: Install tox and initialize workdir
+        run: |
+          sudo apt update && sudo apt install -y tox
+          tox -l
+
+      - name: Lint collection
+        run: for l in $(tox -l | grep lint); do tox -e "$l"; done
+
+  modules:
+    name: "Modules"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.6"
+      - name: Set up pip
+        run: pip3 install --upgrade pip
+
+      - name: Install tox
+        run: sudo apt update && sudo apt install -y tox
+
+      - name: Run sanity tests
+        run: tox -e sanity -- --docker --color -v --python 3.6
+      #- name: Run integration tests
+      #  run: tox -e integration -- --docker --color -v --python 3.6
