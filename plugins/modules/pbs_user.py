@@ -82,20 +82,18 @@ EXAMPLES = r"""
     userid: john@pbs
     state: absent
 """
-import os
-
-from ansible.module_utils.basic import AnsibleModule
-
-from ..module_utils.api_connection import api_connection_argspec
 
 try:
     import proxmoxer
-    HAS_PROXMOXER = True
 except ImportError:
-    HAS_PROXMOXER = False
+    pass  # Handled in init()
+
+from ansible.module_utils.basic import AnsibleModule
+
+from ..module_utils.api_connection import api_connection_argspec, init
 
 
-def add_user(module: AnsibleModule, proxmox, result: dict) -> dict:
+def _make_user_params(module: AnsibleModule, include_password=True) -> dict:
     user_params = {
         "userid": module.params["userid"],
         "comment": module.params["comment"],
@@ -104,11 +102,18 @@ def add_user(module: AnsibleModule, proxmox, result: dict) -> dict:
         "expire": module.params["expire"],
         "firstname": module.params["firstname"],
         "lastname": module.params["lastname"],
-        "password": module.params["password"]
     }
-    user_params = {key: user_params[key] for key in user_params if user_params[key]}
+    user_params = {key: user_params[key] for key in user_params if user_params[key] is not None}
+    if include_password:
+        user_params["password"] = module.params["password"]
+    return user_params
+
+
+def add_user(module: AnsibleModule, proxmox, result: dict) -> dict:
+    user = _make_user_params(module)
+
     try:
-        proxmox.access.users.post(**user_params)
+        proxmox.access.users.post(**user)
     except proxmoxer.ResourceException as e:
         result["msg"] = "Could not create user. Exception: {0}".format(e)
         module.fail_json(**result)
@@ -117,20 +122,10 @@ def add_user(module: AnsibleModule, proxmox, result: dict) -> dict:
 
 
 def update_user(module: AnsibleModule, proxmox, result: dict) -> dict:
-    user_params = {
-        "comment": module.params["comment"],
-        "email": module.params["email"],
-        "enable": module.params["enabled"],
-        "expire": module.params["expire"],
-        "firstname": module.params["firstname"],
-        "lastname": module.params["lastname"],
-    }
-    user_params = {key: user_params[key] for key in user_params if user_params[key]}
-    if module.params["password_update"]:
-        user_params["password"] = module.params["password"]
+    user = _make_user_params(module, include_password=module.params["password_update"])
 
     try:
-        getattr(proxmox.access.users, module.params["userid"]).put(**user_params)
+        getattr(proxmox.access.users, module.params["userid"]).put(**user)
     except proxmoxer.ResourceException as e:
         result["msg"] = "Could not update user. Exception: {0}".format(e)
         module.fail_json(**result)
@@ -150,7 +145,6 @@ def delete_user(module: AnsibleModule, proxmox, result: dict) -> dict:
 
 
 def main():
-
     module_args = dict(
         comment=dict(type="str"),
         email=dict(type="str"),
@@ -170,29 +164,7 @@ def main():
         required_if=[("password_update", True, ["password"])]
     )
 
-    if not HAS_PROXMOXER:
-        result["msg"] = "This module requires proxmoxer >=1.2. Please install it with pip"
-        module.fail_json(**result)
-
-    if not module.params["api_password"]:
-        try:
-            module.params["api_password"] = os.environ["PROXMOX_PASSWORD"]
-        except KeyError:
-            result["msg"] = (
-                "Neither api_password nor the PROXMOX_PASSWORD enviroment variable are set. "
-                "Please specify a password for connecting to the PVE cluster"
-            )
-            module.fail_json(**result)
-
-    try:
-        proxmox = proxmoxer.ProxmoxAPI(module.params["api_host"],
-                                       user=module.params["api_user"],
-                                       password=module.params["api_password"],
-                                       verify_ssl=module.params["validate_certs"],
-                                       service="PBS")
-    except Exception as e:  # pylint: disable=broad-except
-        result["msg"] = "Could not connect to PVE cluster. Exception: {0}".format(e)
-        module.fail_json(**result)
+    proxmox = init(module, result, "PBS")
 
     try:
         userlist = proxmox.access.users.get()
@@ -203,33 +175,19 @@ def main():
     users_by_id = {user["userid"]: user for user in userlist}
     user_exists = module.params["userid"] in users_by_id
 
+    action = None
     if not user_exists and module.params["state"] == "present":
         action = add_user
     elif user_exists and module.params["state"] == "absent":
         action = delete_user
     elif user_exists and module.params["state"] == "present":
-        action = None
         if module.params["password_update"]:
             action = update_user
         else:
-            user_params = {
-                "userid": module.params["userid"],
-                "comment": module.params["comment"],
-                "email": module.params["email"],
-                "enable": module.params["enabled"],
-                "expire": module.params["expire"],
-                "firstname": module.params["firstname"],
-                "lastname": module.params["lastname"],
-            }
-            for param in user_params:
-                if (
-                    user_params[param] and
-                    users_by_id[module.params["userid"]].get(param, None) != user_params[param]
-                ):
+            params = _make_user_params(module, include_password=False)
+            for param in params:
+                if users_by_id[module.params["userid"]].get(param, None) != params[param]:
                     action = update_user
-
-    else:
-        action = None
 
     if action is not None:
         if module.check_mode:

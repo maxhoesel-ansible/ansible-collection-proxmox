@@ -6,6 +6,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import os
 
 api_connection_argspec = dict(
     api_host=dict(type="str", required=True),
@@ -13,3 +14,43 @@ api_connection_argspec = dict(
     api_password=dict(type="str", no_log=True),
     validate_certs=dict(type="bool", default=False)
 )
+
+try:
+    import proxmoxer
+    HAS_PROXMOXER = True
+except ImportError:
+    HAS_PROXMOXER = False
+
+
+def init(module, result, service):
+    """Connect to a Proxmox API server and return an API connection object
+
+    Args:
+        module (AnsibleModule): The calling module object
+        result (dict): The result dict
+        service (str): Service to connect to. Options are "PVE", "PBS", "PMG"
+    """
+    if not HAS_PROXMOXER:
+        result["msg"] = "This module requires proxmoxer >=1.2. Please install it with pip"
+        module.fail_json(**result)
+
+    if not module.params["api_password"]:
+        try:
+            module.params["api_password"] = os.environ["PROXMOX_PASSWORD"]
+        except KeyError:
+            result["msg"] = (
+                "Neither api_password nor the PROXMOX_PASSWORD environment variable are set. "
+                "Please specify a password for connecting to the PVE cluster"
+            )
+            module.fail_json(**result)
+
+    try:
+        proxmox = proxmoxer.ProxmoxAPI(module.params["api_host"],
+                                       user=module.params["api_user"],
+                                       password=module.params["api_password"],
+                                       verify_ssl=module.params["validate_certs"],
+                                       service=service)
+    except Exception as e:  # pylint: disable=broad-except
+        result["msg"] = "Could not connect to {0} host. Exception: {1}".format(service, e)
+        module.fail_json(**result)
+    return proxmox
