@@ -22,13 +22,11 @@ jobs:
       - name: Set up pip
         run: pip3 install --upgrade pip
 
-      - name: Install tox and initialize workdir
-        run: |
-          sudo apt update && sudo apt install -y tox
-          tox -l
+      - name: Install tox
+        run: pip3 install tox
 
       - name: Lint collection
-        run: for l in $(tox -l | grep lint); do tox -e "$l"; done
+        run: tox -e lint
 
   modules:
     name: "Modules"
