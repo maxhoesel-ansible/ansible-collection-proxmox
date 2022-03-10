@@ -119,7 +119,7 @@ def main():
     proxmox = init(module, result, "PBS")
 
     try:
-        acls = proxmox.access.acl.get({"path": module.params["path"], "exact": True})
+        acls = proxmox.access.acl.get(path=module.params["path"], exact=True)
     except proxmoxer.ResourceException as e:
         result["msg"] = "Could not get ACL for {0}. Exception: {1}".format(
             module.params["path"], e)
@@ -129,7 +129,7 @@ def main():
         return (
             pbs_acl["path"] == module.params["path"] and
             pbs_acl["roleid"] == module.params["role"] and
-            pbs_acl["ugid"] == module.params["userid"]
+            pbs_acl["ugid"] == module.params["auth_id"]
         )
     match = [acl for acl in acls if acl_match(acl)]
 
