@@ -77,26 +77,26 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 # Create a basic HA resource for a guest (and ensure that the guest is started)
 - proxmox_ha:
-    api_user    : root@pam
+    api_user: root@pam
     api_password: secret
-    api_host    : helldorado
-    name        : myvirtualmachine
+    api_host: helldorado
+    name: myvirtualmachine
 
 # Create a HA resource for a VMID and set the state to "stopped"
 - proxomx_ha:
-    api_user    : root@pam
+    api_user: root@pam
     api_password: secret
-    api_host    : helldorado
-    vmid        : 123
-    state       : stopped
+    api_host: helldorado
+    vmid: 123
+    state: stopped
 
 # Remove a HA resource by guest name
 - proxomx_ha:
-    api_user    : root@pam
+    api_user: root@pam
     api_password: secret
-    api_host    : helldorado
-    name        : myvirtualmachine
-    state       : absent
+    api_host: helldorado
+    name: myvirtualmachine
+    state: absent
 """
 
 import re

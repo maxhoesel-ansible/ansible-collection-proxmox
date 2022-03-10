@@ -48,6 +48,9 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 - name: ACL for user john is present
   maxhoesel.proxmox.pbs_acl:
+    api_user: root@pam
+    api_password: secret
+    api_host: helldorado
     path: /datastore/backup1
     role: DatastoreBackup
     auth_id: john@pbs

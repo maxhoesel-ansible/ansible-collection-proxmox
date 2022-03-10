@@ -51,6 +51,9 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 - name: Create an API token for a user
   maxhoesel.proxmox.pbs_token:
+    api_user: root@pam
+    api_password: secret
+    api_host: helldorado
     name: mytoken
     userid: john@pbs
 """
