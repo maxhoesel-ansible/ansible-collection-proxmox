@@ -88,6 +88,9 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 - name: Create/Update a datastore
   maxhoesel.proxmox.pbs_datastore:
+    api_user: root@pam
+    api_password: secret
+    api_host: helldorado
     name: test-datastore
     path: /mnt/somedisk/thisdirectory
     gc_schedule: daily

@@ -70,6 +70,9 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 - name: Ensure that the user john@pbs exists
   maxhoesel.proxmox.pbs_user:
+    api_user: root@pam
+    api_password: secret
+    api_host: helldorado
     userid: john@pbs
     firstname: John
     lastname: Smith
@@ -79,6 +82,9 @@ EXAMPLES = r"""
 
 - name: Ensure that the user john@smith does not exist
   maxhoesel.proxmox.pbs_user:
+    api_user: root@pam
+    api_password: secret
+    api_host: helldorado
     userid: john@pbs
     state: absent
 """
