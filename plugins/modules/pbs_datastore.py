@@ -52,15 +52,15 @@ options:
       gc:
         description: Garbage Collection notification setting
         type: str
-        choices: ["always", "never", "errors"]
+        choices: ["always", "never", "error"]
       sync:
         description: Sync Jobs notification setting
         type: str
-        choices: ["always", "never", "errors"]
+        choices: ["always", "never", "error"]
       verify:
         description: Verification notification setting
         type: str
-        choices: ["always", "never", "errors"]
+        choices: ["always", "never", "error"]
   notify_user:
     description: User ID to notify
     type: str
@@ -99,9 +99,9 @@ EXAMPLES = r"""
     keep_weekly: 4
     keep_monthly: 6
     notify:
-      gc: errors
-      verify: errors
-      sync: errors
+      gc: error
+      verify: error
+      sync: error
     verify_new: yes
 """
 
@@ -116,10 +116,12 @@ except ImportError:
     HAS_PROXMOXER = False
 
 
-def _make_datastore_params(module: AnsibleModule) -> dict:
-    notify = ",".join([key + "=" + module.params["notify"][key] for key in module.params["notify"]])
+def _make_datastore_params(module: AnsibleModule, include_urlparams: bool = False) -> dict:
+    if module.params["notify"] is not None:
+        notify = ",".join([key + "=" + module.params["notify"][key] for key in module.params["notify"]])
+    else:
+        notify = None
     datastore_params = {
-        "name": module.params["name"],
         "path": module.params["path"],
         "comment": module.params["comment"],
         "gc-schedule": module.params["gc_schedule"],
@@ -131,16 +133,18 @@ def _make_datastore_params(module: AnsibleModule) -> dict:
         "keep-yearly": module.params["keep_yearly"],
         "notify-user": module.params["notify_user"],
         "notify": notify,
-        "prune_schedule": module.params["prune_schedule"],
+        "prune-schedule": module.params["prune_schedule"],
         "verify-new": module.params["verify_new"]
     }
     datastore_params = {key: datastore_params[key]
                         for key in datastore_params if datastore_params[key] is not None}
+    if include_urlparams:
+        datastore_params["name"] = module.params["name"]
     return datastore_params
 
 
 def add_datastore(module: AnsibleModule, proxmox, result: dict) -> dict:
-    datastore = _make_datastore_params(module)
+    datastore = _make_datastore_params(module, include_urlparams=True)
 
     if "path" not in datastore:
         result["msg"] = "path is required to create a new datastore"
@@ -192,9 +196,9 @@ def main():
         keep_yearly=dict(type="int"),
         name=dict(type="str", required=True),
         notify=dict(type="dict", options=dict(
-            gc=dict(type="str", choices=["always", "never", "errors"]),
-            sync=dict(type="str", choices=["always", "never", "errors"]),
-            verify=dict(type="str", choices=["always", "never", "errors"])
+            gc=dict(type="str", choices=["always", "never", "error"]),
+            sync=dict(type="str", choices=["always", "never", "error"]),
+            verify=dict(type="str", choices=["always", "never", "error"])
         )),
         notify_user=dict(type="str"),
         path=dict(type="str"),

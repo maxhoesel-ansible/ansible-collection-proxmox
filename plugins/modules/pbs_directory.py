@@ -170,7 +170,7 @@ def main():
         action = delete_directory
     elif not mount_exists and module.params["state"] == "present":
         try:
-            disks = getattr(proxmox.nodes, module.params["node"]).disks.list.get()
+            disks = getattr(proxmox.nodes, module.params["node"]).disks.list.get(skipsmart=True)
         except proxmoxer.ResourceException as e:
             result["msg"] = "Could not get list of disks on node {0}. Exception: {1}".format(
                 module.params["node"], e)
