@@ -22,7 +22,7 @@
         owner: root
         group: root
         mode: "640"
-    - name: Import master pubkey
+    - name: Import master pubkey # noqa no-changed-when
       ansible.builtin.command: proxmox-backup-client key import-master-pubkey /tmp/proxmox-backup-client-pubkey.pem
   when: _master_key_check.stdout | length == 0
   always:
