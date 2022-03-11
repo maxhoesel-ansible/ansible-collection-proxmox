@@ -1,0 +1,17 @@
+- name: Verify that required parameters are set
+  assert:
+    that:
+      - pbs_client_repository is defined
+      - pbs_client_repository | length > 0
+      - pbs_client_password is defined
+      - pbs_client_password | length > 0
+      - pbs_client_backup_archives is defined
+      - pbs_client_backup_archives | length > 0
+  when: pbs_client_configure_backup
+
+- name: Verify that pubkey is set if encryption is RSA
+  assert:
+    that:
+      - pbs_client_encryption_pubkey is defined
+      - pbs_client_encryption_pubkey | length > 0
+  when: pbs_client_encryption_mode == "rsa"

@@ -1,0 +1,19 @@
+pbs_client_configure_backup: yes
+
+#pbs_client_repository: ""
+#pbs_client_fingerprint: ""
+#pbs_client_password: ""
+#pbs_client_backup_archives: []
+
+pbs_client_include_mountpoints: []
+#pbs_client_backup_id:
+
+pbs_client_encryption_mode: none
+#pbs_client_encryption_pubkey:
+
+pbs_client_schedule_name: proxmox-backup-client
+pbs_client_schedule: daily
+pbs_client_schedule_randomdelay: 1800
+pbs_client_schedule_persistent: yes
+pbs_client_schedule_require_ac: no
+pbs_client_on_error_units: []
