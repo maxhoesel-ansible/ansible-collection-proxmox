@@ -1,0 +1,44 @@
+[Unit]
+Description=Proxmox Client Backup Job
+Wants=network-online.target
+After=network-online.target
+{% if pbs_client_schedule_require_ac %}
+ConditionACPower=true
+{% endif %}
+{% if pbs_client_on_error_units | length > 0 %}
+OnFailure={{ pbs_client_on_error_units | join(" ") }}
+{% endif %}
+
+[Service]
+Type=oneshot
+Restart=no
+LogRateLimitIntervalSec=0
+
+# Lower CPU and I/O priority.
+Nice=19
+CPUSchedulingPolicy=batch
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOWeight=100
+
+Environment="PBS_REPOSITORY={{ pbs_client_repository }}"
+Environment="PBS_PASSWORD={{ pbs_client_password }}"
+{% if pbs_client_fingerprint is defined %}
+Environment="PBS_FINGERPRINT={{ pbs_client_fingerprint }}"
+{% endif %}
+
+{% if pbs_client_include_mountpoints == "all" %}
+{%   set mounts = "--all-file-systems" %}
+{% else %}
+{%   set mounts = [] %}
+{%   for m in mounts %}
+{%     set _ = mounts.append("--include-dev " + (m | quote)) %}
+{%   endfor %}
+{%   set mounts = mounts | join(" ") %}
+{% endif %}
+
+{% if pbs_client_backup_id %}
+{% set backup_id = "--backup-id " +(pbs_client_backup_id|quote) %}
+{% endif %}
+
+ExecStart=/usr/bin/proxmox-backup-client backup {{ pbs_client_backup_archives | map('quote') | join(" ") }} {{ mounts }} {{ backup_id|d("") }}

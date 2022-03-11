@@ -1,0 +1,5 @@
+- hosts: ubuntu:debian
+  tasks:
+    - name: Update apt
+      apt:
+        update_cache: yes

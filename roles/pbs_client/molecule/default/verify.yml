@@ -1,0 +1,15 @@
+- name: verify
+  hosts: all
+  tasks:
+    # Ansibles service_facts doesn't return timer objects,
+    # so we check for its status this way instead
+    - name: Check timer status
+      systemd:
+        name: "proxmox-backup-client-test.timer"
+        enabled: yes
+        state: started
+      register: pbs_client_timer_enabled
+      check_mode: yes
+    - name: Verify that timer is enabled and running
+      assert:
+        that: not pbs_client_timer_enabled.changed

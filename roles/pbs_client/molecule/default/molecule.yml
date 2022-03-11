@@ -1,0 +1,53 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: pbs-client-ubuntu-20
+    hostname: pbs-client-ubuntu-20.localdomain
+    groups:
+      - ubuntu
+    image: "geerlingguy/docker-ubuntu2004-ansible"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    override_command: false
+    pre_build_image: true
+
+  - name: pbs-client-debian-11
+    hostname: pbs-client-debian-11.localdomain
+    groups:
+      - debian
+    image: "geerlingguy/docker-debian11-ansible"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    override_command: false
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  config_options:
+    ssh_connection:
+      pipelining: yes
+    defaults:
+      forks: 15
+
+scenario:
+  test_sequence:
+    - lint
+    - destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - check # also run check mode in regular tests
+    - side_effect
+    - verify
+    - destroy
+
+verifier:
+  name: ansible

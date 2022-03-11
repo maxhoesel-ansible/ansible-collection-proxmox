@@ -1,0 +1,18 @@
+- name: converge
+  hosts: all
+  tasks:
+    - name: Setup PBS Client
+      ansible.builtin.include_role:
+        name: pbs_client
+      vars:
+        pbs_client_repository: test@pbs@127.0.0.1:datastore1
+        pbs_client_password: nonexistent
+        pbs_client_backup_archives:
+          - "root.pxar:/"
+        pbs_client_backup_id: "{{ ansible_fqdn }}"
+        pbs_client_include_mountpoints:
+          - /var/external-data
+        pbs_client_encryption_mode: rsa
+        pbs_client_encryption_pubkey: "{{ lookup('file', './files/master-pubkey.pem') }}"
+        pbs_client_schedule: "2099-12-31"
+        pbs_client_schedule_name: proxmox-backup-client-test

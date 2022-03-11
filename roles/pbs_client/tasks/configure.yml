@@ -1,0 +1,55 @@
+- name: Check if backup key is present
+  ansible.builtin.command: proxmox-backup-client key show --output-format json
+  register: _key_check
+  failed_when: '_key_check.rc != 0 and "no default file found" not in  _key_check.stderr'
+  changed_when: no
+  check_mode: no
+- name: Create backup key
+  ansible.builtin.command: sudo proxmox-backup-client key create --kdf none
+  when: _key_check.stdout | length == 0
+
+- name: Check if master pubkey is present
+  ansible.builtin.command: proxmox-backup-client key show-master-pubkey --output-format json
+  register: _master_key_check
+  failed_when: '_master_key_check.rc != 0 and "no default master key available" not in  _master_key_check.stderr'
+  changed_when: no
+  check_mode: no
+- block:
+    - name: Create master pubkey tmpfile
+      ansible.builtin.copy:
+        dest: /tmp/proxmox-backup-client-pubkey.pem
+        content: "{{ pbs_client_encryption_pubkey }}"
+        owner: root
+        group: root
+        mode: "640"
+    - name: Import master pubkey
+      ansible.builtin.command: proxmox-backup-client key import-master-pubkey /tmp/proxmox-backup-client-pubkey.pem
+  when: _master_key_check.stdout | length == 0
+  always:
+    - name: Master pubkey tmpfile is absent
+      ansible.builtin.file:
+        path: /tmp/proxmox-backup-client-pubkey.pem
+        state: absent
+
+- name: Backup service unit file is installed
+  ansible.builtin.template:
+    src: proxmox-backup-client.service.j2
+    dest: "/etc/systemd/system/{{ pbs_client_schedule_name }}.service"
+    owner: root
+    group: root
+    mode: "640"
+
+- name: Backup timer unit file is installed
+  ansible.builtin.template:
+    src: proxmox-backup-client.timer.j2
+    dest: "/etc/systemd/system/{{ pbs_client_schedule_name }}.timer"
+    owner: root
+    group: root
+    mode: "644"
+
+- name: Backup timer is enabled
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    name: "{{ pbs_client_schedule_name }}.timer"
+    enabled: yes
+    state: started

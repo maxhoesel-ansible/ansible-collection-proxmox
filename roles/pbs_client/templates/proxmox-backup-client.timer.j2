@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Proxmox-Backup-Client Backup Job
+
+[Timer]
+OnCalendar={{ pbs_client_schedule }}
+Persistent={{ pbs_client_schedule_persistent }}
+RandomizedDelaySec={{ pbs_client_schedule_randomdelay }}
+
+[Install]
+WantedBy=timers.target
