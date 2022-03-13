@@ -37,7 +37,7 @@ Environment="PBS_FINGERPRINT={{ pbs_client_fingerprint }}"
 {%   set mounts = mounts | join(" ") %}
 {% endif %}
 
-{% if pbs_client_backup_id %}
+{% if pbs_client_backup_id is defined %}
 {% set backup_id = "--backup-id " +(pbs_client_backup_id|quote) %}
 {% endif %}
 
