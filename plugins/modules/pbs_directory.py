@@ -126,7 +126,7 @@ def delete_directory(module: AnsibleModule, proxmox, result: dict) -> dict:
 
 def init_gpt(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
-        getattr(proxmox.nodes, module.params["node"]).disks.initgpt.post({"disk": module.params["disk"]})
+        getattr(proxmox.nodes, module.params["node"]).disks.initgpt.post(disk=module.params["disk"])
     except proxmoxer.ResourceException as e:
         result["msg"] = "Could not initialize disk with GPT table. Exception: {0}".format(e)
         module.fail_json(**result)
@@ -197,7 +197,7 @@ def main():
                     result = init_gpt(module, proxmox, result)
             else:
                 result["msg"] = "Disk does not have a GPT partition table and init_gpt is not set, cannot continue"
-            module.fail_json(**result)
+                module.fail_json(**result)
         action = add_directory
 
     if action is not None:
