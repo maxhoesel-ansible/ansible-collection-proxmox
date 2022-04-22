@@ -1,9 +1,8 @@
 - ansible.builtin.include_tasks: check.yml # noqa unnamed-task
 
-- ansible.builtin.include_tasks: install.yml # noqa unnamed-task
-  when: not pbs_client_skip_install
-  become: yes
-
-- ansible.builtin.include_tasks: configure.yml # noqa unnamed-task
-  when: pbs_client_configure_backup
+- block:
+  - ansible.builtin.include_tasks: install.yml # noqa unnamed-task
+    when: not pbs_client_skip_install
+  - ansible.builtin.include_tasks: configure.yml # noqa unnamed-task
+    when: pbs_client_configure_backup
   become: yes
