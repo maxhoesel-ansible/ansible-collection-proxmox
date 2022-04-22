@@ -1,5 +1,5 @@
 # The Buster repository doesn't work with the PVE-provided key, so we use the bullseye version
-# for all destributions
+# for all Debian-based destributions
 - name: Proxmox APT key is present
   ansible.builtin.get_url:
     url: https://enterprise.proxmox.com/debian/proxmox-release-bullseye.gpg
@@ -14,5 +14,5 @@
     update_cache: yes
 
 - name: Proxmox Backup Client is installed
-  apt:
+  ansible.builtin.apt:
     name: proxmox-backup-client

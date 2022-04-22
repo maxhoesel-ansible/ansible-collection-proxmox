@@ -1,4 +1,5 @@
 pbs_client_configure_backup: yes
+pbs_client_skip_install: false
 
 #pbs_client_repository: ""
 #pbs_client_fingerprint: ""

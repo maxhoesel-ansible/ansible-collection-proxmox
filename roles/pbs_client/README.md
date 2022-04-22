@@ -18,6 +18,11 @@ Additionally, a backup job can be configured and scheduled.
 - If `false`, the PBS client will be installed with no further configuration done
 - Default: `true`
 
+#### `pbs_client_skip_install`
+- When to `true`, this role will not attempt to install the backup client and instead just assume that it is already present.
+- This is useful if you already installed the backup client manually
+- Default: `false`
+
 ### General configuration
 
 #### `pbs_client_repository`
@@ -76,9 +81,8 @@ All encryption modes require you to somehow save the encryption keyfile/private 
   - `keyfile`: An AES-256 encryption key is generated and saved on the client. This key is used to encrypt every backup archive
     - Please make sure to backup this keyfile to an external location. **You will not be able to restore from backup without this key!**
     - The key is stored without password protection to enable automatic backups.
-      Storing the key with password protection wouldn't make any sense, as we would still have to store the password somewhere.
   - `rsa`: Same as above, but a RSA public key is used to encrypt the backup keyfile, which is then appended to every backup.
-    - This allows you to restore from backup with the private key and without needing to know the AES keyfile. This is especially useful if you want to reuse an existing RSA keypair.
+    - This allows you to restore from a backup with the private key and without needing to know the AES keyfile. This is especially useful if you want to reuse an existing RSA keypair.
     - Please make sure to keep a copy of the private key corresponding to the public key around. **You will not be able to restore from backup without this key!**
 - Default: `none`
 
