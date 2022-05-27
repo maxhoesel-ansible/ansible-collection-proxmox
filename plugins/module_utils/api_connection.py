@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
 
 import os
 
@@ -51,6 +47,6 @@ def init(module, result, service):
                                        verify_ssl=module.params["validate_certs"],
                                        service=service)
     except Exception as e:  # pylint: disable=broad-except
-        result["msg"] = "Could not connect to {0} host. Exception: {1}".format(service, e)
+        result["msg"] = f"Could not connect to {service} host. Exception: {e}"
         module.fail_json(**result)
     return proxmox

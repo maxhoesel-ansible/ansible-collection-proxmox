@@ -1,12 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import (absolute_import, division, print_function)
 
-__metaclass__ = type
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: pbs_datastore
@@ -153,7 +150,7 @@ def add_datastore(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         proxmox.config.datastore.post(**datastore)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not create datastore. Exception: {0}".format(e)
+        result["msg"] = f"Could not create datastore. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -165,7 +162,7 @@ def update_datastore(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         getattr(proxmox.config.datastore, module.params["name"]).put(**datastore)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not update datastore. Exception: {0}".format(e)
+        result["msg"] = f"Could not update datastore. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
 
@@ -177,7 +174,7 @@ def delete_datastore(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         proxmox.access.acl.put(**datastore)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not delete datastore. Exception: {0}".format(e)
+        result["msg"] = f"Could not delete datastore. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -217,7 +214,7 @@ def main():
     try:
         datastores = proxmox.config.datastore.get()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not get list of datastores. Exception: {0}".format(e)
+        result["msg"] = f"Could not get list of datastores. Exception: {e}"
         module.fail_json(**result)
 
     datastores_by_name = {ds["name"]: ds for ds in datastores}

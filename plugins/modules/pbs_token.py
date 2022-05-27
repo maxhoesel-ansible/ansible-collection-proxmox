@@ -1,12 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import (absolute_import, division, print_function)
 
-__metaclass__ = type
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: pbs_token
@@ -95,7 +92,7 @@ def add_token(module: AnsibleModule, proxmox, result: dict) -> dict:
         r = getattr(getattr(proxmox.access.users, module.params["userid"]).token,
                     module.params["name"]).post(**token)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not create token. Exception: {0}".format(e)
+        result["msg"] = f"Could not create token. Exception: {e}"
         module.fail_json(**result)
     result["tokenid"] = r["tokenid"]
     result["secret"] = r["value"]
@@ -111,7 +108,7 @@ def update_token(module: AnsibleModule, proxmox, result: dict) -> dict:
         getattr(getattr(proxmox.access.users, module.params["userid"]).token,
                 module.params["name"]).put(**token)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not update token. Exception: {0}".format(e)
+        result["msg"] = f"Could not update token. Exception: {e}"
         module.fail_json(**result)
 
     result["changed"] = True
@@ -123,7 +120,7 @@ def delete_token(module: AnsibleModule, proxmox, result: dict) -> dict:
         getattr(getattr(proxmox.access.users, module.params["userid"]).token,
                 module.params["name"]).delete()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not delete token. Exception: {0}".format(e)
+        result["msg"] = f"Could not delete token. Exception: {e}"
         module.fail_json(**result)
 
     result["changed"] = True
@@ -150,8 +147,7 @@ def main():
     try:
         tokenlist = getattr(proxmox.access.users, module.params["userid"]).token.get()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not get list tokens for user {0}. Exception: {1}".format(
-            module.params["userid"], e)
+        result["msg"] = f"Could not get list tokens for user {module.params['userid']}. Exception: {e}"
         module.fail_json(**result)
 
     tokens_by_name = {token["token-name"]: token for token in tokenlist}

@@ -14,7 +14,7 @@
   failed_when: '_master_key_check.rc != 0 and "no default master key available" not in  _master_key_check.stderr'
   changed_when: no
   check_mode: no
-- block:
+- block: # noqa unnamed-task
     - name: Create master pubkey tmpfile
       ansible.builtin.copy:
         dest: /tmp/proxmox-backup-client-pubkey.pem
