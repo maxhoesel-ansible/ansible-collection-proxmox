@@ -4,5 +4,6 @@ offline: true
 exclude_paths:
   - tests/integration/targets/
   - .github/
-  - .chglog/
-  - .pre-commit-config.yaml
+
+skip_list:
+  - 'fqcn-builtins'
