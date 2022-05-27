@@ -2,12 +2,24 @@
 set -eu
 set -e pipefail
 
+printf "Creating project-specific virtualenv in .venv..."
 python3 -m venv .venv
+printf "OK\n"
+
 source .venv/bin/activate
 
-pip3 install pre-commit tox gitlint ansible proxmoxer requests
+printf "Installing development requirements..."
+python3 -m pip install --quiet -r requirements.txt
+printf "OK\n"
 
-pre-commit install --hook-type commit-msg
+printf "Installing pre-commit hook..."
+pre-commit install > /dev/null
+printf "OK\n"
 
-# Initialize tox venvs
+printf "Initializing tox..."
 tox -l > /dev/null
+printf "OK\n"
+
+printf "Development venv initialized!\n"
+printf "To activate it, run:\n\n"
+printf "source .venv/bin/activate\n"

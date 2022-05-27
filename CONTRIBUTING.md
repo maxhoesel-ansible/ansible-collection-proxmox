@@ -2,51 +2,43 @@
 
 Below you will find the information needed to contribute to this project.
 
-Note that by contributing to this collection, you agree with the code of conduct you can find [here.](https://github.com/maxhoesel/ansible-collection-proxmox/blob/main/CODE_OF_CONDUCT.md)
+Note that by contributing to this collection, you agree with the code of conduct you can find [here.](https://github.com/maxhoesel-ansible/ansible-collection-proxmox/blob/main/CODE_OF_CONDUCT.md)
 
 ## Requirements
 
 To begin development on this collection, you need to have the following dependencies installed:
 
-- Docker (for running `ansible-test`)
-- Python **3.6** or higher (required for ansible>=5)
+- Docker, accessible by your local user account
+- Python 2.7 or 3.6+. CI tests run specifically against either 2.7 or 3.6, but to make things easier we just use whatever version is available locally
 
 ## Quick Start
 
 1. Fork the repository and clone it to your local machine
-2. Run `./scripts/setup.sh`. This will set up a virtualenv in `.venv` containing all the dev dependencies
-3. **Every time you want to do work on this project, run `source .venv/bin/activate` to activate the venv**
-4. You should now be able to run `tox -l` to see all available tests
-
-## About commit messages and structure
-
-Follow the guidelines below when committing your changes
-
-- All commits **must** follow the [conventional-commits standard](https://www.conventionalcommits.org/en/v1.0.0/):
-  `<type>(optional scope): <description>`
-  - Valid scopes are all components of this collection, such as modules or roles
-- Structure your changes so that they are separated into logical and independent commits whenever possible.
-- The commit message should clearly state **what** your change does. The "why" and "how" belong into the commit body.
-
-Some good examples:
-- `fix(step_ca): don't install unneeded packages`
-- `feat(step_ca_certificate): add support for RA flags`
-
-Don't be afraid to rename/amend/rewrite your branch history to achieve these goals!
-Take a look at the `git rebase -i` and `git commit --amend` commands if you are not sure how to do so.
-As long as your make these changes on your feature branch, there is no harm in doing so.
-
+2. Run `./scripts/setup.sh` to configure a local dev environment (virtualenv) with all required dependencies
+3. Activate the virtualenv with `source .venv/bin/activate`
+4. Make your changes and commit them to a new branch
+5. Run the tests locally with `./scripts/test.sh`. This will run the full test suite that also runs in the CI
+6. Once you're done, commit your changes (make sure that you are in the venv).
+   Pre-commit will format your code and check for any obvious errors when you do so.
 
 ## Hints for Development
 
 For Modules:
 - Make sure that you have read the [Ansible module conventions](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html)
-- Each module should typically wrap around one proxmox API call.
-- Make sure to use the doc fragment and utils already present, specifically the connection fragments used for parameters like api_host/user/password.
+- Make sure to use the doc fragment and utils already present when possible.
+- If you need to troubleshoot inside the ansible-test container, add `--docker-terminate never` to the
+  call inside the testing script. The container will then persist even on failure, and you can debug it
+
+For Roles:
+- None so far
+
+In general:
+- Don't be afraid to rewrite your local branch history to clean up your commit messages!
+  You should familiarize yourself with `git rebase -i` if you haven't done so already.
 
 ## Testing Framework
 
-We use the `ansible-test` suite to test modules. Calls to these are handled by `tox` and the [`tox-ansible` extension]( https://github.com/ansible-community/tox-ansible).
+We use `molecule` to test all roles and the `ansible-test` suite to test modules. Calls to these are handled by `tox` and the [`tox-ansible` extension]( https://github.com/ansible-community/tox-ansible).
 You can run all the required tests for this project with `./scripts/test.sh`. You can also open that file to view the individual test stages.
 
 Note that you **can't** just run `tox`, as the `sanity` and `integration` environments need extra parameters passed to
@@ -55,17 +47,13 @@ also adds a few unneeded environments to the list, such as `env`.
 
 #### Creating new module tests
 
-We currently only run sanity tests for our modules via `ansible-test`. Unit/Integration tests and molecule tests are TODO.
+We currently only run sanity tests for our modules via `ansible-test`.
 
-## Release Workflow
+## Information for maintainers
 
-This project uses semantic versioning. Name versions accordingly.
+This project uses sematic versioning. Version numbers and  releases/changelogs are automatically generated using [release-drafter](https://github.com/release-drafter/release-drafter), utilizing pull request labels.
 
-To create a release, run the "Create Release" GitHub Action with the desired version number (e.g. "0.3.0").
-This action will:
+When merging a pull request, make sure to select an appropriate label (pr-bugfix, pr-feature, etc.).
+release-drafter will automatically update the draft release changelog and the galaxy.yml version will be bumped if needed.
 
-1. Bump the version number in `galaxy.yml`
-2. Update the changelog
-3. Commit the changes in a "Release" commit and push it
-4. Create a GitHub release (which will also create a tag at that commit)
-5. Build the collection and publish the new release on galaxy
+Once a draft release is published, collection packages will be added to the release and ansible-galaxy automatically.

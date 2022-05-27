@@ -1,8 +1,6 @@
 [tool.autopep8]
 max_line_length = 120
-ignore = [
-    "E402" # Imports at top of file
-]
+ignore = "E402"
 
 # Pylint settings
 [tool.pylint.'NESSAGES CONTROL']
@@ -17,9 +15,9 @@ disable=[
     "invalid-name",
     "too-many-boolean-expressions",
     "too-few-public-methods",
-    "I",
-    "wrong-import-position",
-    "consider-using-f-string"
+    'wrong-import-position', # Ansible module best practices
+    "I"
 ]
+
 [tool.pylint.'FORMAT']
 max-line-length=120
