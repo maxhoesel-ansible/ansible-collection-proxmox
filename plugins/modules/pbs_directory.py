@@ -1,12 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import (absolute_import, division, print_function)
 
-__metaclass__ = type
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: pbs_directory
@@ -107,7 +104,7 @@ def add_directory(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         getattr(proxmox.nodes, module.params["node"]).disks.directory.post(**directory)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not create directory mount. Exception: {0}".format(e)
+        result["msg"] = f"Could not create directory mount. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -118,7 +115,7 @@ def delete_directory(module: AnsibleModule, proxmox, result: dict) -> dict:
         getattr(getattr(proxmox.nodes, module.params["node"]
                         ).disks.directory, module.params["mount_name"]).delete()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not delete directory mount. Exception: {0}".format(e)
+        result["msg"] = f"Could not delete directory mount. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -128,7 +125,7 @@ def init_gpt(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         getattr(proxmox.nodes, module.params["node"]).disks.initgpt.post(disk=module.params["disk"])
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not initialize disk with GPT table. Exception: {0}".format(e)
+        result["msg"] = f"Could not initialize disk with GPT table. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -158,8 +155,7 @@ def main():
     try:
         mounts = getattr(proxmox.nodes, module.params["node"]).disks.directory.get()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not get list of disk mounts on node {0}. Exception: {1}".format(
-            module.params["node"], e)
+        result["msg"] = f"Could not get list of disk mounts on node {module.params['node']}. Exception: {e}"
         module.fail_json(**result)
 
     mounts_by_name = {mount["name"]: mount for mount in mounts}
@@ -172,21 +168,19 @@ def main():
         try:
             disks = getattr(proxmox.nodes, module.params["node"]).disks.list.get(skipsmart=True)
         except proxmoxer.ResourceException as e:
-            result["msg"] = "Could not get list of disks on node {0}. Exception: {1}".format(
-                module.params["node"], e)
+            result["msg"] = f"Could not get list of disks on node {module.params['node']}. Exception: {e}"
             module.fail_json(**result)
 
         disks_by_name = {disk["name"]: disk for disk in disks}
         disk_exists = module.params["disk"] in disks_by_name
 
         if not disk_exists:
-            result["msg"] = "Disk with name {0} does not exist".format(module.params["disk"])
+            result["msg"] = f"Disk with name {module.params['disk']} does not exist"
             module.fail_json(**result)
 
         disk = disks_by_name[module.params["disk"]]
         if disk["used"] != "unused":
-            result["msg"] = "Cannot operate on disk that is in state {0}. Disk must either be unused".format(
-                disk["used"])
+            result["msg"] = f"Cannot operate on disk that is in state {disk['used']}. Disk must either be unused"
             module.fail_json(**result)
 
         if not disk["gpt"]:

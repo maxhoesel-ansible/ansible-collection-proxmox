@@ -4,7 +4,7 @@
   register: lxcostemplate_existing_image
   when: not lxcostemplate_overwrite
 
-- block:
+- block: # noqa unnamed-task
   - name: Get cluster VMs
     command: pvesh get /cluster/resources -type vm --output-format json
     register: cluster_vms

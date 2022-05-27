@@ -11,6 +11,12 @@ repos:
       - id: mixed-line-ending
       - id: check-executables-have-shebangs
       - id: debug-statements
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.32.1
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py36-plus
   - repo: https://github.com/ansible/ansible-lint
     rev: v6.2.1
     hooks:
@@ -26,7 +32,6 @@ repos:
             "-rn", # Only display messages
             "-sn", # Don't display the score
           ]
-
 ci:
   skip:
     - pylint

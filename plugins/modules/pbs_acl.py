@@ -1,12 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import (absolute_import, division, print_function)
 
-__metaclass__ = type
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: pbs_acl
@@ -84,7 +81,7 @@ def add_acl(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         proxmox.access.acl.put(**acl)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not add/update ACL. Exception: {0}".format(e)
+        result["msg"] = f"Could not add/update ACL. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -95,7 +92,7 @@ def delete_acl(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         proxmox.access.acl.put(**acl)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not delete ACL. Exception: {0}".format(e)
+        result["msg"] = f"Could not delete ACL. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -121,8 +118,7 @@ def main():
     try:
         acls = proxmox.access.acl.get(path=module.params["path"], exact=True)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not get ACL for {0}. Exception: {1}".format(
-            module.params["path"], e)
+        result["msg"] = f"Could not get ACL for {module.params['path']}. Exception: {e}"
         module.fail_json(**result)
 
     def acl_match(pbs_acl):

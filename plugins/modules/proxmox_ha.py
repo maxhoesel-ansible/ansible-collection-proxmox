@@ -1,19 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2020, Max Hösel < ansible at maxhoesel.de >
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
-ANSIBLE_METADATA = {"metadata_version": "1.1",
-                    "status": ["preview"],
-                    "supported_by": "community"}
-
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: proxmox_ha
@@ -113,6 +103,7 @@ except ImportError:
     HAS_PROXMOXER = False
 
 
+# pylint: disable=too-many-statements
 def main():
     m = AnsibleModule(
         argument_spec={**dict(
@@ -152,8 +143,7 @@ def main():
                                        verify_ssl=m.params["validate_certs"])
         PVE_MAJOR_VERSION = int(proxmox.version.get()["version"].split(".")[0])
     except Exception as e:  # pylint: disable=broad-except
-        m.fail_json(
-            msg="Could not connect to PVE cluster. Exception: {0}".format(e))
+        m.fail_json(msg=f"Could not connect to PVE cluster. Exception: {e}")
 
     if PVE_MAJOR_VERSION <= 3:
         m.fail_json(
@@ -166,8 +156,7 @@ def main():
             vmid = str([vm["vmid"] for vm in proxmox.cluster.resources.get(type="vm")
                         if vm["name"] == m.params["name"]][0])
         except IndexError:
-            m.fail_json(msg="Could not VMID for name {0} in cluster resources".format(
-                m.params["name"]))
+            m.fail_json(msg=f"Could not VMID for name {m.params['name']} in cluster resources")
         except proxmoxer.ResourceException:
             m.fail_json(msg="Could not get PVE resource information")
 
@@ -176,9 +165,9 @@ def main():
         _resources_list = proxmox.cluster.ha.resources.get()
     except proxmoxer.ResourceException as e:
         m.fail_json(msg="Could not get HA resource list from pve cluster."
-                    "Is your cluster healthy? Exception: {0}".format(e))
+                    f"Is your cluster healthy? Exception: {e}")
     _resources = [res for res in _resources_list
-                  if re.match("^[a-z]+:{0}$".format(vmid), res["sid"])]
+                  if re.match(f"^[a-z]+:{vmid}$", res["sid"])]
     if _resources:
         # Remove the "ct/vm" prefix from sid - Proxmox can just use the VMID itself
         _resources[0]["sid"] = _resources[0]["sid"].split(":")[1]
@@ -200,16 +189,15 @@ def main():
     if m.params["state"] == "absent":
         if not current_config:
             m.exit_json(changed=False,
-                        msg="Resource {0} does not exist".format(vmid))
+                        msg=f"Resource {vmid} does not exist")
         else:
             # Remove the resource
             if not m.check_mode:
                 try:
                     getattr(proxmox.cluster.ha.resources, vmid).delete()
                 except proxmoxer.ResourceException as e:
-                    m.fail_json(msg="Could not remove HA resource {0}. Exception: {1}".format(
-                        m.params["vmid]"], e))
-            m.exit_json(changed=True, msg="Resource {0} removed".format(vmid))
+                    m.fail_json(msg=f"Could not remove HA resource {m.params['vmid']}. Exception: {e}")
+            m.exit_json(changed=True, msg=f"Resource {vmid} removed")
     else:
         # Create our desired config from the passed parameters
         desired_config = {
@@ -240,9 +228,8 @@ def main():
                     proxmox.cluster.ha.resources.post(**desired_config)
                 except proxmoxer.ResourceException as e:
                     m.fail_json(
-                        msg="Could not add HA resource {0}. Exception: {1}".format(vmid, e))
-            m.exit_json(changed=True, msg="Added resource {0}".format(
-                vmid), resource=desired_config)
+                        msg=f"Could not add HA resource {vmid}. Exception: {e}")
+            m.exit_json(changed=True, msg=f"Added resource {vmid}", resource=desired_config)
         else:
             # Remote resource exists, compare and update if required
             if desired_config == current_config:
@@ -256,8 +243,8 @@ def main():
                         getattr(proxmox.cluster.ha.resources, vmid).put(**_t)
                     except proxmoxer.ResourceException as e:
                         m.fail_json(
-                            msg="Could not change HA resource {0}. Exception: {1}".format(vmid, e))
-                m.exit_json(changed=True, msg="Changed resource {0}".format(vmid),
+                            msg=f"Could not change HA resource {vmid}. Exception: {e}")
+                m.exit_json(changed=True, msg=f"Changed resource {vmid}",
                             old=current_config, new=desired_config)
 
 

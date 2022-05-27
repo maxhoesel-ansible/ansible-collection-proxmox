@@ -13,7 +13,7 @@
   check_mode: no
   become: yes
 
-- block:
+- block: # noqa unnamed-task
   - name: Update ostemplate list
     command: pveam update
     changed_when: no

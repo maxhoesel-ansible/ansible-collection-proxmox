@@ -1,12 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Max Hösel <ansible@maxhoesel.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import (absolute_import, division, print_function)
 
-__metaclass__ = type
-
+# pylint: disable=duplicate-code
 DOCUMENTATION = r"""
 ---
 module: pbs_user
@@ -121,7 +118,7 @@ def add_user(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         proxmox.access.users.post(**user)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not create user. Exception: {0}".format(e)
+        result["msg"] = f"Could not create user. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -133,7 +130,7 @@ def update_user(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         getattr(proxmox.access.users, module.params["userid"]).put(**user)
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not update user. Exception: {0}".format(e)
+        result["msg"] = f"Could not update user. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
 
@@ -144,7 +141,7 @@ def delete_user(module: AnsibleModule, proxmox, result: dict) -> dict:
     try:
         getattr(proxmox.access.users, module.params["userid"]).delete()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not delete user. Exception: {0}".format(e)
+        result["msg"] = f"Could not delete user. Exception: {e}"
         module.fail_json(**result)
     result["changed"] = True
     return result
@@ -175,7 +172,7 @@ def main():
     try:
         userlist = proxmox.access.users.get()
     except proxmoxer.ResourceException as e:
-        result["msg"] = "Could not get list of current users. Exception: {0}".format(e)
+        result["msg"] = f"Could not get list of current users. Exception: {e}"
         module.fail_json(**result)
 
     users_by_id = {user["userid"]: user for user in userlist}
