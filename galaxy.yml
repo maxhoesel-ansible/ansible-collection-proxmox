@@ -1,7 +1,11 @@
 authors:
 - Max Hösel <ansible@maxhoesel.de>
 build_ignore:
-- .venv
+  - "*.tar.gz"
+  - ".venv"
+  - ".github"
+  - ".tox"
+  - ".pytest_cache"
 dependencies:
   ansible.posix: '>=1.0,<2.0'
 description: Collection dealing with Proxmox VE and BS hosts
