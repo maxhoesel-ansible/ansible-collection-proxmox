@@ -5,19 +5,18 @@ build_ignore:
 dependencies:
   ansible.posix: '>=1.0,<2.0'
 description: Collection dealing with Proxmox VE and BS hosts
-documentation: https://github.com/maxhoesel/ansible-collection-proxmox
-homepage: https://github.com/maxhoesel/ansible-collection-proxmox
-issues: https://github.com/maxhoesel/ansible-collection-proxmox/issues
+issues: https://github.com/maxhoesel-ansible/ansible-collection-proxmox/issues
 license:
 - GPL-3.0-or-later
 license_file: ''
 name: proxmox
 namespace: maxhoesel
 readme: README.md
-repository: https://github.com/maxhoesel/ansible-collection-proxmox
+repository: https://github.com/maxhoesel-ansible/ansible-collection-proxmox
 tags:
 - proxmox
 - lxc
 - kvm
 - virtualization
+- pbs
 version: 4.1.1
