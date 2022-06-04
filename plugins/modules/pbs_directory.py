@@ -183,15 +183,14 @@ def main():
             result["msg"] = f"Cannot operate on disk that is in state {disk['used']}. Disk must either be unused"
             module.fail_json(**result)
 
-        if not disk["gpt"]:
-            if module.params["init_gpt"]:
-                if module.check_mode:
-                    result["changed"] = True
-                else:
-                    result = init_gpt(module, proxmox, result)
+        if not disk["gpt"] and module.params["init_gpt"]:
+            if module.check_mode:
+                result["changed"] = True
             else:
-                result["msg"] = "Disk does not have a GPT partition table and init_gpt is not set, cannot continue"
-                module.fail_json(**result)
+                result = init_gpt(module, proxmox, result)
+        elif not module.params["init_gpt"]:
+            result["msg"] = "Disk does not have a GPT partition table and init_gpt is not set, cannot continue"
+            module.fail_json(**result)
         action = add_directory
 
     if action is not None:

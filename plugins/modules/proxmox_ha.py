@@ -103,7 +103,7 @@ except ImportError:
     HAS_PROXMOXER = False
 
 
-# pylint: disable=too-many-statements
+# pylint: disable=too-many-statements,too-many-branches
 def main():
     m = AnsibleModule(
         argument_spec={**dict(
