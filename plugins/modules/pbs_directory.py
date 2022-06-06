@@ -131,6 +131,7 @@ def init_gpt(module: AnsibleModule, proxmox, result: dict) -> dict:
     return result
 
 
+# pylint: disable=too-many-branches
 def main():
 
     module_args = dict(

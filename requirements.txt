@@ -1,13 +1,13 @@
 # Module deps, useful for editor intellisense, etc.
-ansible-core
-requests
-proxmoxer
+ansible-core==2.13.0
+requests==2.27.1
+proxmoxer==1.3.1
 
 # Linting & Formatting
-ansible-lint
-pylint
-autopep8
-pre-commit
+ansible-lint==6.2.2
+pylint==2.14.0
+autopep8==1.6.0
+pre-commit==2.19.0
 
 # Testing
-tox
+tox==3.25.0
