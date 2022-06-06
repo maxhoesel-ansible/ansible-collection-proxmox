@@ -5,7 +5,7 @@ proxmoxer==1.3.1
 
 # Linting & Formatting
 ansible-lint==6.2.2
-pylint==2.14.0
+pylint==2.14.1
 autopep8==1.6.0
 pre-commit==2.19.0
 
