@@ -11,3 +11,7 @@ pre-commit==2.19.0
 
 # Testing
 tox==3.25.0
+
+# Utility packages needed for scripts
+pyyaml==6.0.0
+packaging==21.3
