@@ -6,6 +6,7 @@ build_ignore:
   - ".github"
   - ".tox"
   - ".pytest_cache"
+  - "scripts"
 dependencies:
   ansible.posix: '>=1.0,<2.0'
 description: Collection dealing with Proxmox VE and BS hosts
