@@ -194,7 +194,7 @@ def main():
             # Remove the resource
             if not m.check_mode:
                 try:
-                    getattr(proxmox.cluster.ha.resources, vmid).delete()
+                    getattr(proxmox.cluster.ha.resources, str(vmid)).delete()
                 except proxmoxer.ResourceException as e:
                     m.fail_json(msg=f"Could not remove HA resource {m.params['vmid']}. Exception: {e}")
             m.exit_json(changed=True, msg=f"Resource {vmid} removed")
@@ -240,7 +240,7 @@ def main():
                     _t = desired_config
                     _t.pop("sid")
                     try:
-                        getattr(proxmox.cluster.ha.resources, vmid).put(**_t)
+                        getattr(proxmox.cluster.ha.resources, str(vmid)).put(**_t)
                     except proxmoxer.ResourceException as e:
                         m.fail_json(
                             msg=f"Could not change HA resource {vmid}. Exception: {e}")
