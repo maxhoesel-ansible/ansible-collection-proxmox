@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up Python 3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3"
       - name: Set up pip and install requirements
@@ -38,7 +38,7 @@ jobs:
       - name: Check out codebase
         uses: actions/checkout@v3
       - name: Set up Python 3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3"
       - name: Set up pip and install requirements
@@ -62,7 +62,7 @@ jobs:
   #    - name: Check out codebase
   #      uses: actions/checkout@v3
   #    - name: Set up Python 3
-  #      uses: actions/setup-python@v3
+  #      uses: actions/setup-python@v4
   #    - name: Set up pip and install requirements
   #      run: |
   #        python -m pip install --upgrade pip
@@ -79,7 +79,7 @@ jobs:
       - name: Check out codebase
         uses: actions/checkout@v3
       - name: Set up Python 3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3"
       - name: Set up pip and install requirements
@@ -109,7 +109,7 @@ jobs:
       - name: Check out codebase
         uses: actions/checkout@v3
       - name: Set up Python 3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3"
       - name: Set up pip and install requirements
@@ -139,7 +139,7 @@ jobs:
       - name: Check out codebase
         uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
       - name: Set up pip and install requirements
         run: |
           python -m pip install --upgrade pip
