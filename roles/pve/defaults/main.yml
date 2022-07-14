@@ -1,1 +1,4 @@
 pve_repo_type: no-subscription
+
+pve_set_cpu: no
+pve_cpu_governor: performance
