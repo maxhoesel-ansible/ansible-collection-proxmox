@@ -1,0 +1,6 @@
+- name: update initramfs
+  command: update-initramfs -u -k all
+
+- name: reboot host to enable vifo kernel modules
+  ansible.builtin.reboot:
+  when: pve_pcie_reboot_for_kernel

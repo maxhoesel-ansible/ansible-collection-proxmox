@@ -1,0 +1,20 @@
+- name: intel_iommu=on kernel parameter is enabled
+  copy:
+    src: intel-iommu.cfg
+    dest: /etc/default/grub.d/intel-iommu.cfg
+    owner: root
+    group: root
+    mode: "644"
+  when: '"GenuineIntel" in ansible_processor | unique'
+  notify: reboot host to enable vifo kernel modules
+
+- name: vfio kernel modules are enabled
+  copy:
+    src: vfio.conf
+    dest: /etc/modules-load.d/vfio.conf
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - update initramfs
+    - reboot host to enable vifo kernel modules

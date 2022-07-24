@@ -15,3 +15,5 @@
 - include_tasks: repo.yml
 - include_tasks: cpu.yml
   when: pve_set_cpu
+- include_tasks: pcie_passthrough.yml
+  when: pve_enable_pcie_passthrough
