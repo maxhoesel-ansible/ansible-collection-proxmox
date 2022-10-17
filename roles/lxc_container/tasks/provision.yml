@@ -1,5 +1,5 @@
 - name: Container is present
-  proxmox: '{{ lxccreate_module_args }}'
+  community.general.proxmox: '{{ lxccreate_module_args }}'
   delegate_to: localhost
   register: pve_lxccreate_task
   throttle: 1
@@ -7,7 +7,7 @@
   pause:
     seconds: 10
 - name: Container is started
-  proxmox:
+  community.general.proxmox:
     api_host: '{{ pve_api_host }}'
     api_user: '{{ pve_api_user }}'
     api_password: '{{ pve_api_password }}'

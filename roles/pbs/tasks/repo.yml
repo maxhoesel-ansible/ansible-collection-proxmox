@@ -1,4 +1,4 @@
-- name: "{{ pbs_repo_type }} is enabled"
+- name: "Repo is enabled: {{ pbs_repo_type }}"
   apt_repository:
     repo: "deb http://download.proxmox.com/debian/pbs {{ ansible_distribution_release }} {{ pbs_repo_names[pbs_repo_type] }}"
     filename: "{{ pbs_repo_names[pbs_repo_type] }}"
