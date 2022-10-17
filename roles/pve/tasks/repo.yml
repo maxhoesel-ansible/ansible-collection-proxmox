@@ -1,4 +1,4 @@
-- name: "{{ pve_repo_type }} is enabled"
+- name: "Enable Repository: {{ pve_repo_type }}"
   apt_repository:
     repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
     filename: "{{ pve_repo_names[pve_repo_type] }}"
