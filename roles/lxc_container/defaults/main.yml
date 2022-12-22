@@ -2,13 +2,13 @@
 # This role needs API and SSH access to a PVE node with become privileges
 # in order to create a container. Please set pve_host to the corresponding
 # host present in the inventory
-pve_host: pve.example.com
+#pve_host: pve.example.com
 pve_api_host: '{{ pve_host }}'
 pve_api_user: root@pam
-pve_api_password: mypassword
+#pve_api_password: mypassword
 
 # Hostname of the new container
-lxccreate_hostname: my-container
+#lxccreate_hostname: my-container
 lxccreate_ostemplate: 'local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
 # Automatically download the specified base template from the PVE repository if the image is not present
 lxccreate_ostemplate_download: yes

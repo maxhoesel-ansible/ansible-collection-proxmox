@@ -15,6 +15,9 @@ Other distributions should work as well, as long as they:
 - use a package manager also used by one of the above distros
 - use systemd for service management (or rc for Alpine)
 
+The main use for this role is to create an Ansible-compatible container image for consumption by the `lxc_container_to_ostemplate` role
+that you can then deploy with Ansible directly. If you are looking for a more general solution to deploy LXC containers, I recommend looking into the [`community.general.proxmox`](https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html) module (that also powers this role) or, for a more Infrastructure-as-Code oriented approach, [Terraform](https://www.terraform.io/).
+
 Requirements
 ------------
 
@@ -35,7 +38,7 @@ Install via pip: `pip3 install proxmoxer requests`
 Role Variables
 --------------
 
-See `defaults/main.yml`
+See [`defaults/main.yml`](./defaults/main.yml) or the [module argspec](./meta/argument_specs.yml)
 
 Dependencies
 ------------

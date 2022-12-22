@@ -4,7 +4,7 @@ lxc_container_to_ostemplate
 Converts a LXC container into an ostemplate that can be used to generate new containers.
 
 This role performs the following actions:
-1. Created a gz-compressed backup of a given container with vzdump
+1. Creates a gz-compressed backup of a given container with vzdump
 2. Moves the backup into the templates location of a given storage volume
 
 Requirements
