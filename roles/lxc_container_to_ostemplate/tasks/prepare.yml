@@ -14,4 +14,4 @@
   - name: Get guest VMID
     set_fact:
       lxcostemplate_vmid: '{{ (cluster_vms.stdout | from_json | selectattr("name", "match", lxcostemplate_hostname) | map(attribute="vmid") | list).0 }}'
-  when: not lxcostemplate_vmid
+  when: not lxcostemplate_vmid is defined

@@ -1,0 +1,45 @@
+argument_specs:
+  main:
+    short_description: Performs basic setup steps on a Proxmox Backup Server host
+    description:
+      - |
+        This role performs basic setup steps on a Proxmox Backup Server host. It does not manage
+        PBS configuration (storages, pools, etc.) - instead, it configures
+        the underlying system and platform (such as the root user and proxmox repository).
+      - |
+        The PBS host must already be running and accessible via SSH
+    options:
+      pbs_root_password:
+        type: str
+        description:
+          - Password for the root user
+          - Must be a string of at least 8 characters
+        required: yes
+      pbs_repo_type:
+        type: str
+        choices: ['enterprise', 'no-subscription', 'test']
+        default: 'no-subscription'
+        description:
+          - Selects which PBS repository is enabled for pulling updates
+          - Please note that this role does not configure your subscription key, you will have to do so yourself
+      pbs_configure_smartd:
+        type: bool
+        default: false
+        description:
+          - Whether to enable configuration of smartd with this role.
+      pbs_smartd_mail:
+        type: str
+        default: root
+        description:
+          - Where to send mail alerts. Can be a user name of an email address
+      pbs_smartd_temperature_warn:
+        type: int
+        default: 40
+        description:
+          - Hard disk temperature at which smartd should throw an alarm.
+      pbs_smartd_test_schedule:
+        type: str
+        default: '(S/../.././02|L/../../6/03)'
+        description:
+          - Schedule regex for drive self-tests, as passed to the `-s` parameter of smartd.
+          - See L(the man page,https://linux.die.net/man/5/smartd.conf) for more details

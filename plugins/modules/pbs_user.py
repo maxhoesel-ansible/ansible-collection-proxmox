@@ -10,7 +10,7 @@ module: pbs_user
 author: Max Hösel (@maxhoesel)
 short_description: Manage users on a Proxmox Backup Server
 version_added: '4.0.0'
-description: Create, update and delete user accounts on a Proxmox backup Server instance.
+description: Create, update and delete user accounts on a Proxmox Backup Server instance.
 notes:
   - Check mode is supported.
   - Only PBS-Native users are currently supported (i.e. the @pbs realm)
@@ -53,7 +53,7 @@ options:
       - absent
   userid:
     description: >
-        User ID, in the format "user@realm". Example: john@pbs
+        User ID, in the format C(user@realm). Example: C(john@pbs)
     aliases:
       - name
       - id

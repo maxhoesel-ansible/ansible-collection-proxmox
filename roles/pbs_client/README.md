@@ -7,7 +7,8 @@ Additionally, a backup job can be configured and scheduled.
 
 ## Requirements
 
-- Ubuntu 20.04 or later
+- Ubuntu 20.04
+    - Note that Ubuntu 22.04 is currently broken because of [this issue](https://bugzilla.proxmox.com/show_bug.cgi?id=4191)
 - Debian 11 or later
 - Root access via `become: yes` or equivalent
 
@@ -69,7 +70,7 @@ Additionally, a backup job can be configured and scheduled.
 
 Before you enable encryption, make sure to familiarize yourself with the way PBS handles encryption keys and passwords (see [here](https://pbs.proxmox.com/docs/backup-client.html#encryption)).
 All encryption modes require you to somehow save the encryption keyfile/private key to a separate machine.
-**The backup will become irrecoverable if you do not have a copy of the encryption key (i.e. if your client host fails)!**
+**The backup will become irrecoverable if you do not have a copy of the encryption key!**
 
 ---
 
@@ -111,7 +112,7 @@ All encryption modes require you to somehow save the encryption keyfile/private 
 - Default: `true`
 
 #### `pbs_client_schedule_require_ac`
-- Whether the backup should run even if no AC power is present.
+- Whether the backup should be skipped if no AC power is present.
 - This should work on all modern systems, but it is set to `false` by default just to be sure.
 - Default: `false`
 

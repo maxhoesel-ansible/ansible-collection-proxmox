@@ -1,0 +1,56 @@
+argument_specs:
+  main:
+    short_description: Performs basic setup tasks on a PVE node, such as repository and CPU configuration.
+    description:
+      - |
+        The following features are available and can be enabled/disabled individually:
+        - Set a PVE repository (enterprise, no-subscription, test) (required)
+        - Set the PVE root password (required)
+        - Set the CPU governor to save power or improve performance
+        - Support PCIe Passthrough by enabling the required modules
+      - |
+        The PVE host must already be running and accessible via SSH
+      - |
+        This role needs to be run with C(become: true)
+    options:
+      pve_root_password:
+        type: str
+        description:
+          - Password for the root user
+          - Must be a string of at least 8 characters
+        required: yes
+      pve_repo_type:
+        type: str
+        choices: ['enterprise', 'no-subscription', 'test']
+        default: 'no-subscription'
+        description:
+          - Selects which PVE repository is enabled for pulling updates
+          - Please note that this role does not configure your subscription key, you will have to do so yourself
+      pve_set_cpu:
+        type: bool
+        default: false
+        description:
+          - Whether to modify the CPU configuration, such as the chosen governor.
+      pve_cpu_governor:
+        type: str
+        default: performance
+        description:
+          - Which CPU governor to use for all CPU cores on each node
+          - You can check which CPU governors are available for your CPU and driver by running C(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors) on one of your nodes.
+          - The C(intel_pstate) driver hands much of the CPU scaling off to the hardware and only supports two governors, C(powersave) and C(performance). See the L(kernel docs,https://www.kernel.org/doc/html/v4.19/admin-guide/pm/intel_pstate.html) for more information.
+          - Older Intel CPUs under the C(intel_cpufreq) driver and AMD CPUs can use any L(generic governor,https://www.kernel.org/doc/Documentation/cpu-freq/governors.txt).
+          - Proxmox defaults to C(performance) due to potential L(BSODs in Windows guests when running with variable frequency,https://forum.proxmox.com/threads/windows-7-x64-vms-crashing-randomly-during-process-termination.18238/#post-93273).
+          - C(ondemand) and C(schedutil) both scale CPU frequency dynamically and may improve power consumption.
+      pve_enable_pcie_passthrough:
+        type: bool
+        default: false
+        description:
+          - Whether to enable and configure PCIe passthrough on the host
+          - If enabled, this will load the required kernel modules (and add C(intel_iommu=on) to the kernel commandline on Intel CPUs)
+      pve_pcie_reboot_for_kernel:
+        type: bool
+        default: true
+        description:
+          - Whether to automatically reboot the node to load the required kernel modules
+          - If set to I(false), you may have to manually reboot the node to enable PCIe passthrough
+          - This has no effect if I(pve_enable_pcie_passthrough) is disabled
