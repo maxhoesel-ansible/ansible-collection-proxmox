@@ -4,16 +4,16 @@
 #
 # Note that the target container *must* be running on this host.
 # The host must also have access to the storage defined in lxcostemplate_storage
-pve_host: pve.example.com
+#pve_host: pve.example.com
 
 # Set either the hostname or the vmid of the container to convert into a template.
 # If both are set, the vmid will take precedence
-lxcostemplate_vmid:
-lxcostemplate_hostname:
+#lxcostemplate_vmid:
+#lxcostemplate_hostname:
 # Select the type of vzdump backup to perform. Options are stop, suspend and snapshot
 lxcostemplate_vzdump_mode: snapshot
 # Name of the ostemplate image to generate. .tar.gz will be appended automatically
-lxcostemplate_image: custom-ubuntu_18.04
+#lxcostemplate_image: custom-ubuntu_18.04
 # Name of the storage volume under which the ostemplate will be saved
 lxcostemplate_storage: local
 # Set to yes if you want to overwrite an already existing image

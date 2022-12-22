@@ -11,6 +11,7 @@ source .venv/bin/activate
 printf "Installing development requirements..."
 python3 -m pip install --upgrade pip --quiet
 python3 -m pip install --quiet -r requirements.txt --upgrade
+python3 -m pip install --quiet -r requirements-molecule.txt --upgrade
 printf "OK\n"
 
 printf "Installing pre-commit hook..."

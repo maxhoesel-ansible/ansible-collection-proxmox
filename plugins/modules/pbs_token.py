@@ -24,7 +24,7 @@ options:
     description: Token expiration data (seconds since UNIX epoch). 0 means no expiration date
     type: int
   name:
-    description: Name of the token that will be part of the authid. Example (token1 => "user@pbs!token1")
+    description: "Name of the token that will be part of the authid. Example: C(token1) results in the authid C(user@pbs!token1)"
     aliases:
       - token_name
     required: yes
@@ -37,7 +37,7 @@ options:
       - present
       - absent
   userid:
-    description: User that the token will be created for. Must be in user@realm format (e.g. john@pbs)
+    description: User that the token will be created for. Must be in C(user@realm) format (e.g. C(john@pbs))
     required: yes
     type: str
 
