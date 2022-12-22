@@ -2,34 +2,39 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
+  # Currently broken because of https://bugzilla.proxmox.com/show_bug.cgi?id=4191
+  #- name: pbs-client-ubuntu-22
+  #  groups:
+  #    - ubuntu
+  #  image: "docker.io/geerlingguy/docker-ubuntu2204-ansible"
+  #  systemd: always
+  #  override_command: false
+  #  pre_build_image: true
+
   - name: pbs-client-ubuntu-20
-    hostname: pbs-client-ubuntu-20.localdomain
     groups:
       - ubuntu
-    image: "geerlingguy/docker-ubuntu2004-ansible"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
+    image: "docker.io/geerlingguy/docker-ubuntu2004-ansible"
+    systemd: always
     override_command: false
     pre_build_image: true
 
   - name: pbs-client-debian-11
-    hostname: pbs-client-debian-11.localdomain
     groups:
       - debian
-    image: "geerlingguy/docker-debian11-ansible"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
+    image: "docker.io/geerlingguy/docker-debian11-ansible"
+    systemd: always
     override_command: false
     pre_build_image: true
 
 provisioner:
   name: ansible
   env:
-    ANSIBLE_PIPELINING: "True"
+    # This is required for podman to function: https://github.com/ansible-community/molecule-podman/issues/2
+    ANSIBLE_PIPELINING: false
+    #ANSIBLE_VERBOSITY: 3 # enable for debugging
 
 scenario:
   test_sequence:

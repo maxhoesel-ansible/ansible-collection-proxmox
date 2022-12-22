@@ -7,9 +7,12 @@ build_ignore:
 - .tox
 - .pytest_cache
 - scripts
+- docs
+- .circleci
+- build
 dependencies:
   ansible.posix: '>=1.0,<2.0'
-description: Collection dealing with Proxmox VE and BS hosts
+description: Collection dealing with Proxmox VE and PBS hosts
 issues: https://github.com/maxhoesel-ansible/ansible-collection-proxmox/issues
 license:
 - GPL-3.0-or-later

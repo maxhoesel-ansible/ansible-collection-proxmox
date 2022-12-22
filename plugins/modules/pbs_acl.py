@@ -16,7 +16,7 @@ notes:
 options:
   auth_id:
     description: >
-        Authentication ID to assign the ACL to. Example: john@pbs
+        Authentication ID to assign the ACL to. Example: C(john@pbs)
     type: str
   path:
     description: Access control path.

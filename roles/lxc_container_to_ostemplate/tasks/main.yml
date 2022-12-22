@@ -1,4 +1,10 @@
 ---
+- name: Verify at least one of lxcostemplate_vmid and lxcostemplate_hostname is set
+  ansible.builtin.assert:
+    that:
+      - lxcostemplate_vmid is defined or lxcostemplate_hostname is defined
+    fail_msg: At least one of lxcostemplate_vmid or lxcostemplate_hostname must be set
+
 - name: Set storage basepath for local
   set_fact:
     lxcostemplate_storage_path: /var/lib/vz/template/cache

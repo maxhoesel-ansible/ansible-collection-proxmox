@@ -1,0 +1,53 @@
+argument_specs:
+  main:
+    short_description: Converts a LXC container into an ostemplate that can be used to generate new containers
+    description:
+      - |
+        This role performs the following actions:
+
+        1. Creates a gz-compressed backup of a given container with vzdump
+        2. Moves the backup into the templates location of a given storage volume
+      - |
+        To execute this role, Ansible needs to access the Proxmox host on which the container will be created.
+        To speficy the host, set C(pve_host) to the hots' inventory name. If you don't want to add the host
+        to your inventory file, you can also add it at runtime with the C(add_host) module - see the role L(README,https://github.com/maxhoesel-ansible/ansible-collection-proxmox/tree/main/roles/lxc_container) for an example.
+      - |
+        The main use for this role is to create an Ansible-compatible container image by consuming images created with the C(lxc_container) role.
+        If you are looking for a more general solution to deploy LXC containers, I recommend looking into the L(community.general.proxmox,https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html) module (that also powers this role) or, for a more Infrastructure-as-Code oriented approach, L(Terraform,https://www.terraform.io/).
+    options:
+      pve_host:
+        type: str
+        description:
+          - Inventory hostname of the PVE host to create the container on. Ansible will connect to this host.
+        required: yes
+      lxcostemplate_vmid:
+        type: int
+        description:
+          - VMID of the container to convert into an image
+          - Takes precedence over I(lxcostemplate_hostname)
+      lxcostemplate_hostname:
+        type: str
+        description:
+          - Hostname of the container to convert into an image
+          - I(lxcostemplate_vmid) overwrites this parameter
+      lxcostemplate_vzdump_mode:
+        type: str
+        choices: ["stop", "suspend", "snapshot"]
+        default: "snapshot"
+        description:
+          - Select the type of vzdump backup to perform. Options are stop, suspend and snapshot
+      lxcostemplate_image:
+        required: true
+        type: str
+        description:
+          - Name of the ostemplate image to generate. .tar.gz will be appended automatically
+      lxcostemplate_storage:
+        default: local
+        type: str
+        description:
+          - Name of the storage volume under which the ostemplate will be saved
+      lxcostemplate_overwrite:
+        default: false
+        type: bool
+        description:
+          - Set to yes if you want to overwrite an already existing image

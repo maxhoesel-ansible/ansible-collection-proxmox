@@ -1,0 +1,98 @@
+argument_specs:
+  main:
+    short_description: Creates and bootstraps a LXC container on a Proxmox VE node for usage with Ansible
+    description:
+      - |
+        This role creates a new LXC container on a proxmox host, connects to it over the proxmox hosts shell and bootstraps it by installing a SSH server and Python. This then allows for access from Ansible like normal.
+      - |
+        To execute this role, Ansible needs to access the Proxmox host on which the container will be created.
+        To speficy the host, set C(pve_host) to the hots' inventory name. If you don't want to add the host
+        to your inventory file, you can also add it at runtime with the C(add_host) module - see the role L(README,https://github.com/maxhoesel-ansible/ansible-collection-proxmox/tree/main/roles/lxc_container) for an example.
+      - |
+        This role has been tested on the following container templates:
+
+        - Ubuntu 20.04
+        - Debian 10
+        - Fedora 32
+        - CentOS 7/8
+        - OpenSUSE 15.2
+        - Alpine 3.12
+
+        Other distributions should work as well, as long as they:
+
+        - use a package manager also used by one of the above distros
+        - use systemd for service management (or rc for Alpine)
+      - |
+        The following python modules are required on the controller:
+
+        - proxmoxer
+        - requests
+      - |
+        The main use for this role is to create an Ansible-compatible container image for consumption by the C(lxc_container_to_ostemplate) role
+        that you can then deploy with Ansible directly. If you are looking for a more general solution to deploy LXC containers, I recommend looking into the L(community.general.proxmox,https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html) module (that also powers this role) or, for a more Infrastructure-as-Code oriented approach, L(Terraform,https://www.terraform.io/).
+    options:
+      pve_host:
+        type: str
+        description:
+          - Inventory hostname of the PVE host to create the container on. Ansible will connect to this host.
+        required: yes
+      pve_api_host:
+        type: str
+        default: "{{ pve_host }}"
+        description:
+          - Hostname under which the PVE API is reachable
+          - This will usually the same as I(pve_host), except in cases where you are running the API behind a proxy of some sort
+      pve_api_user:
+        type: str
+        default: "root@pam"
+        description: Username with which to connect to the API
+      pve_api_password:
+        type: str
+        description:
+          - Password with which to connect to the API
+        required: yes
+      lxccreate_hostname:
+        type: str
+        required: yes
+        description:
+          - Hostname of the LXC container to create
+          - Must be a valid PVE container name
+      lxccreate_ostemplate:
+        type: str
+        default: local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz
+        description:
+          - OS Template to create the new container from
+      lxccreate_ostemplate_download:
+        type: bool
+        default: yes
+        description:
+          - Automatically download the specified base template from the PVE repository if the image is not present
+      lxccreate_args:
+        type: dict
+        description:
+          - Additional arguments to be passed to the proxmox module when creating the container.
+          - See L(here,https://docs.ansible.com/ansible/latest/modules/proxmox_module.html) for details about valid parameters
+        default:
+          node: pve
+          cores: 1
+          cpuunits: 1024
+          memory: 1024
+          swap: 0
+          disk: "10"
+          storage: local-lvm
+          onboot: no
+          netif:
+            net0: name=eth0,bridge=vmbr0,ip=dhcp,firewall=0
+          pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
+          unprivileged: yes
+      lxccreate_timeout:
+        type: int
+        description:
+          - Increase this value if you are experiencing timeout errors during PVE API tasks
+        default: 120
+      lxccreate_bootstrap:
+        type: bool
+        default: true
+        description:
+          - Set this to yes to run a simple bootstrap script on the container after creation.
+          - The script will prepare the container for Ansible (SSH server + Python)
