@@ -83,7 +83,7 @@ argument_specs:
           onboot: no
           netif:
             net0: name=eth0,bridge=vmbr0,ip=dhcp,firewall=0
-          pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}'
+          #pubkey: '{{ lookup("file", "~/.ssh/id_rsa.pub") }}' this is checked by the argspec validator, disable
           unprivileged: yes
       lxccreate_timeout:
         type: int
