@@ -6,6 +6,13 @@
 # documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+import yaml
+
+with open("../../galaxy.yml", encoding="utf-8") as f:
+    galaxy = yaml.safe_load(f)
+version = galaxy["version"]
+release = version
+
 project = 'maxhoesel.proxmox'
 # pylint: disable=redefined-builtin
 copyright = 'Max Hösel and Contributor'
