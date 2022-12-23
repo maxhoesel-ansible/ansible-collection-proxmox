@@ -14,12 +14,16 @@
 
 - name: Download OS Template
   ansible.builtin.include_tasks: ostemplate.yml
-  delegate_to: "{{ pve_host }}"
+  args:
+    apply:
+      delegate_to: "{{ pve_host }}"
 
 - name: Provision container
   ansible.builtin.include_tasks: provision.yml
 
 - name: Boostrap container
   ansible.builtin.include_tasks: bootstrap.yml
-  delegate_to: "{{ pve_host }}"
   when: lxccreate_bootstrap and pve_lxccreate_task.changed
+  args:
+    apply:
+      delegate_to: "{{ pve_host }}"

@@ -16,11 +16,15 @@
 
 - name: Prepare cluster for template creation
   ansible.builtin.include_tasks: prepare.yml
-  delegate_to: "{{ pve_host }}"
+  args:
+    apply:
+      delegate_to: "{{ pve_host }}"
 
 - name: Generate OS Template
   ansible.builtin.include_tasks: generate.yml
-  delegate_to: "{{ pve_host }}"
+  args:
+    apply:
+      delegate_to: "{{ pve_host }}"
   when:
     (not lxcostemplate_overwrite and not lxcostemplate_existing_image.stat.exists) or
     lxcostemplate_overwrite
