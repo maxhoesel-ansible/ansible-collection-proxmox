@@ -1,15 +1,25 @@
 authors:
 - Max Hösel <ansible@maxhoesel.de>
 build_ignore:
+- .circleci
+- .github
+- tests
+- CODE_OF_CONDUCT.md
+- CONTRIBUTING.md
+- pyproject.toml
+- tox.ini
+- .yamllint
+- .ansible-lint
+- .pre-commit-config.yaml
 - '*.tar.gz'
 - .venv
-- .github
 - .tox
 - .pytest_cache
 - scripts
-- docs
-- .circleci
-- build
+- requirements.txt
+- requirements-molecule.txt
+- '**/requirements-molecule.txt'
+- '**/requirements.txt'
 dependencies:
   ansible.posix: '>=1.0,<2.0'
 description: Collection dealing with Proxmox VE and PBS hosts
