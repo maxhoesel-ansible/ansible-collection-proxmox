@@ -12,7 +12,7 @@ tox==3.27.1
 
 # Utility packages needed for scripts
 pyyaml==6.0.0
-packaging==21.3
+packaging==22.0
 
 # Module Requirements
 requests==2.28.1
