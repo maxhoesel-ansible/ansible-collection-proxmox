@@ -4,7 +4,7 @@ ansible-core==2.14.1
 # Linting & Formatting
 ansible-lint==6.10.0
 pylint==2.15.9
-autopep8==2.0.0
+autopep8==2.0.1
 pre-commit==2.21.0
 
 # Testing
