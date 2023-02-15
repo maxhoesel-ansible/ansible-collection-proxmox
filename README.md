@@ -43,6 +43,7 @@ With this collection, you can:
 - [`pbs_directory`](https://ansible-collection-proxmox.readthedocs.io/en/latest/collections/maxhoesel/proxmox/pbs_directory_module.html)`
 - [`pbs_token`](https://ansible-collection-proxmox.readthedocs.io/en/latest/collections/maxhoesel/proxmox/pbs_token_module.html)`
 - [`pbs_user`](https://ansible-collection-proxmox.readthedocs.io/en/latest/collections/maxhoesel/proxmox/pbs_user_module.html)`
+- [`list_backups`](https://ansible-collection-proxmox.readthedocs.io/en/latest/collections/maxhoesel/proxmox/list_backup_module.html)`
 
 ## Installation
 
