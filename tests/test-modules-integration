@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 
+# Perform integration tests on the modules
+# To keep retrying a failing test, you can set the following environment variables.
+# This is mainly intended for CI use.
+#   TEST_RETRIES=<num> - Number of times to try the test. Default: 1
+#   TEST_RETRY_DELAY=<num> - Number of seconds to wait between failing test runs. Default: 300 (5min)
+
 set -eu
 set -o pipefail
 
 SCRIPT_DIRECTORY=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# shellcheck disable=1091
+source "$SCRIPT_DIRECTORY/constants.sh"
+# shellcheck disable=1091
+source "$SCRIPT_DIRECTORY/util.sh"
+
+TEST_RETRIES="${TEST_RETRIES:-1}"
+TEST_RETRY_DELAY="${TEST_RETRY_DELAY:-300}"
 
 # Docker settings
 export PROXMOX_PODMAN_NETWORK="proxmox-ansible-modules"
@@ -24,7 +37,7 @@ prepare() {
 }
 
 run() {
-    tox -e integration -- \
+    retry "$TEST_RETRIES" "$TEST_RETRY_DELAY" tox -e integration -- \
         --color -v \
         --controller docker:default --target "docker:default,python=$PYTHON_VERSION" \
         --docker-network $PROXMOX_PODMAN_NETWORK  \
@@ -35,11 +48,9 @@ main() {
     # shellcheck disable=1091
     source "$SCRIPT_DIRECTORY/constants.sh"
 
-    # No module integration tests as of yet
-    #prepare
-    #run
-    #cleanup
-    exit 1
+    prepare
+    run
+    cleanup
 }
 
 main "$@"
