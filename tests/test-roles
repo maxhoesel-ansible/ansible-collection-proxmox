@@ -16,6 +16,8 @@
 set -eu
 set -o pipefail
 
+SCRIPT_DIRECTORY=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # shellcheck disable=1091
 source "$SCRIPT_DIRECTORY/constants.sh"
 # shellcheck disable=1091
@@ -24,7 +26,6 @@ source "$SCRIPT_DIRECTORY/util.sh"
 TEST_RETRIES="${TEST_RETRIES:-1}"
 TEST_RETRY_DELAY="${TEST_RETRY_DELAY:-300}"
 
-SCRIPT_DIRECTORY=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 USAGE=$(cat << EOF
 Usage: test-roles [filter] [--help, -h]
 
