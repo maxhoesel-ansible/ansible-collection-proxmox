@@ -54,3 +54,18 @@ argument_specs:
           - Whether to automatically reboot the node to load the required kernel modules
           - If set to I(false), you may have to manually reboot the node to enable PCIe passthrough
           - This has no effect if I(pve_enable_pcie_passthrough) is disabled
+      pve_install_ucode:
+        type: bool
+        default: false
+        description:
+          - Whether to install the microcode packages for your appropriate CPU
+          - This may not be required on fresh installs of PVE 8 and newer, as Debian 12 ships with this microcode by default
+          - For Debian 11 and lower (PVE <= 7), this requires enabling the `non-free` repository
+          - For Debian 12 and up (PVE >=8), the `non-free-firmware` repository will be enabled instead, if not already present
+      pve_reboot_for_ucode:
+        type: bool
+        default: true
+        description:
+          - Whether to reboot the host after microcode has been installed (if required)
+          - If set to I(false), you may have to manually reboot the node to load the microcode
+          - This has no effect if I(pve_install_ucode) is disabled

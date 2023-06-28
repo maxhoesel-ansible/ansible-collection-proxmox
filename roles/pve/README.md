@@ -4,9 +4,10 @@ A role to perform basic setup tasks on a PVE node, such as repository and CPU co
 
 The following features are available and can be enabled/disabled individually:
 
+- Install CPU microcode for AMD/Intel from the `non-free` debian source component
 - Set a PVE repository (enterprise, no-subscription, test) (required)
 - Set the PVE root password (required)
-- Set the CPU governor to save power or improve performance
+- Optimize the CPU governor selection
 - Support PCIe Passthrough by enabling the required modules
 
 ## Requirements
@@ -28,7 +29,21 @@ The following features are available and can be enabled/disabled individually:
 - Please note that this role does not configure your subscription key, you will have to do so yourself
 - Default: `no-subscription`
 
+
 ### CPU Settings
+
+##### `pve_install_ucode`
+- Whether to install the microcode packages for your appropriate CPU
+- This may not be required on fresh installs of PVE 8 and newer, as Debian 12 ships with this microcode by default
+- For Debian 11 and lower (PVE <= 7), this requires enabling the `non-free` repository
+- For Debian 12 and up (PVE >=8), the `non-free-firmware` repository will be enabled instead, if not already present
+- Default: `false`
+
+##### `pve_reboot_for_ucode`
+- Whether to reboot the host after microcode has been installed (if required)
+- If set to `false`, you may have to manually reboot the node to load the microcode
+- This has no effect if `pve_install_ucode` is disabled
+- Default: `true`
 
 ##### `pve_set_cpu`
 - Whether to modify the CPU configuration, such as the chosen governor.

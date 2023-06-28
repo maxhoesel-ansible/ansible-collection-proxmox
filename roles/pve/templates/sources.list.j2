@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+deb http://deb.debian.org/debian {{ ansible_distribution_release }} main contrib {{ pve_non_free_firmware_text }}
+deb-src http://deb.debian.org/debian {{ ansible_distribution_release }} main contrib {{ pve_non_free_firmware_text }}
+
+deb http://deb.debian.org/debian-security/ {{ ansible_distribution_release }}-security main contrib {{ pve_non_free_firmware_text }}
+deb-src http://deb.debian.org/debian-security/ {{ ansible_distribution_release }}-security main contrib {{ pve_non_free_firmware_text }}
+
+deb http://deb.debian.org/debian {{ ansible_distribution_release }}-updates main contrib {{ pve_non_free_firmware_text }}
+deb-src http://deb.debian.org/debian {{ ansible_distribution_release }}-updates main contrib {{ pve_non_free_firmware_text }}

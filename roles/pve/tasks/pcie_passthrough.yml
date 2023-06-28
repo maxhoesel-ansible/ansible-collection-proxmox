@@ -6,7 +6,7 @@
     group: root
     mode: "644"
   when: '"GenuineIntel" in ansible_processor | unique'
-  notify: reboot host to enable vifo kernel modules
+  notify: reboot host to enable pcie passthrough
 
 - name: vfio kernel modules are enabled
   copy:
@@ -17,4 +17,4 @@
     mode: "644"
   notify:
     - update initramfs
-    - reboot host to enable vifo kernel modules
+    - reboot host to enable pcie passthrough

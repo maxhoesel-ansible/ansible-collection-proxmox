@@ -1,0 +1,7 @@
+[Unit]
+Description=Adjust CPU governor after boot
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cpupower -c all frequency-set -g {{ pve_cpu_governor }}
+[Install]
+WantedBy=multi-user.target

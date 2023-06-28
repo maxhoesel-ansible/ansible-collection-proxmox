@@ -15,6 +15,9 @@
 
 - name: Setup PBS repo
   include_tasks: repo.yml
+- name: Install microcode
+  ansible.builtin.include_tasks: ucode.yml
+  when: pve_install_ucode
 - name: Configure CPU governor
   include_tasks: cpu.yml
   when: pve_set_cpu

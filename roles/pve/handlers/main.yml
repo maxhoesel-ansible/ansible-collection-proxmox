@@ -1,6 +1,23 @@
 - name: update initramfs
   command: update-initramfs -u -k all
 
-- name: reboot host to enable vifo kernel modules
-  ansible.builtin.reboot:
+# These wrapper handlers are needed to ensure that we only reboot when allowed, and only reboot once
+- name: reboot host to enable pcie passthrough
+  meta: noop
+  changed_when: true
+  notify: _reboot host
   when: pve_pcie_reboot_for_kernel
+
+- name: reboot host to update microcode
+  meta: noop
+  changed_when: true
+  notify: _reboot host
+  when: pve_reboot_for_ucode
+
+- name: _reboot host
+  ansible.builtin.reboot:
+
+- name: restart cpu-governor service
+  ansible.builtin.systemd:
+    name: cpu-governor.service
+    state: restarted

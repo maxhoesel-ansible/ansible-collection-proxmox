@@ -1,0 +1,13 @@
+- name: deb repository configuration is present
+  ansible.builtin.template:
+    src: templates/sources.list.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: "644"
+
+- name: Microcode package is installed
+  ansible.builtin.apt:
+    name: "{{ pve_ucode_package[ansible_processor[1]] }}"
+    update_cache: yes
+  notify: reboot host to update microcode
