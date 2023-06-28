@@ -5,3 +5,6 @@ pve_cpu_governor: performance
 
 pve_enable_pcie_passthrough: no
 pve_pcie_reboot_for_kernel: yes
+
+pve_install_ucode: false
+pve_reboot_for_ucode: true

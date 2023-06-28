@@ -1,20 +1,16 @@
-- name: "Enable Repository: {{ pve_repo_type }}"
+- name: "Selected PVE repository is enabled"
   apt_repository:
     repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
     filename: "{{ pve_repo_names[pve_repo_type] }}"
     update_cache: no
 
-- name: Get other repositories
-  set_fact:
-    _pve_disable_repos: "{{ pve_repo_names.keys() | difference([pve_repo_type]) }}"
-
-- name: Other repositories are disabled
+- name: Other PVE repositories are disabled
   apt_repository:
     repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} {{ pve_repo_names[item] }}"
     state: absent
     filename: "{{ pve_repo_names[item] }}"
     update_cache: no
-  loop: "{{ _pve_disable_repos }}"
+  loop: "{{ pve_disable_repos }}"
 
 - name: Update APT cache
   apt:

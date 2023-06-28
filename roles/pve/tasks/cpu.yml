@@ -2,14 +2,18 @@
   ansible.builtin.apt:
     name: linux-cpupower
 
-- name: Get current governor
-  ansible.builtin.shell: "cat /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_governor"
-  changed_when: no
-  check_mode: no
-  register: _pve_current_governor
+- name: cpu-governor service is installed
+  ansible.builtin.template:
+    src: templates/cpu-governor.service.j2
+    dest: /etc/systemd/system/cpu-governor.service
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart cpu-governor service
 
-- name: Set CPU governor to {{ pve_cpu_governor }}
-  ansible.builtin.command: "cpupower frequency-set -g {{ pve_cpu_governor }}"
-  when: >
-    (_pve_current_governor.stdout_lines | unique | select | list).0 != pve_cpu_governor or
-    (_pve_current_governor.stdout_lines | unique | select | list | length) > 1
+- name: cpu-governor service is enabled and running
+  ansible.builtin.systemd:
+    name: cpu-governor.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
