@@ -4,7 +4,7 @@ pve_repo_names:
   test: pvetest
 pve_disable_repos: "{{ pve_repo_names.keys() | difference([pve_repo_type]) }}"
 
-pve_non_free_firmware_text: "{{ pve_install_ucode | ternary(ansible_distribution_major_version < 12 | ternary('non-free', 'non-free-firmware')) }}"
+pve_non_free_firmware_text: "{{ pve_install_ucode | ternary(((ansible_distribution_major_version | int) < 12) | ternary('non-free', 'non-free-firmware'), '') }}"
 pve_ucode_package:
   AuthenticAMD: amd64-microcode
   GenuineIntel: intel-microcode
