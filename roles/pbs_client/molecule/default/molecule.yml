@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: podman
 platforms:
   # Currently broken because of https://bugzilla.proxmox.com/show_bug.cgi?id=4191
   #- name: pbs-client-ubuntu-22
@@ -28,28 +24,3 @@ platforms:
     systemd: always
     override_command: false
     pre_build_image: true
-
-provisioner:
-  name: ansible
-  env:
-    # This is required for podman to function: https://github.com/ansible-community/molecule-podman/issues/2
-    ANSIBLE_PIPELINING: false
-    #ANSIBLE_VERBOSITY: 3 # enable for debugging
-
-scenario:
-  test_sequence:
-    - lint
-    - destroy
-    - dependency
-    - syntax
-    - create
-    - prepare
-    - converge
-    - idempotence
-    - check # also run check mode in regular tests
-    - side_effect
-    - verify
-    - destroy
-
-verifier:
-  name: ansible
