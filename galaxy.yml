@@ -3,21 +3,22 @@ authors:
 build_ignore:
 - .circleci
 - .github
+- .config
+- .vscode
+- dist
 - CODE_OF_CONDUCT.md
 - CONTRIBUTING.md
-- pyproject.toml
-- tox.ini
 - .yamllint
-- .ansible-lint
-- .pre-commit-config.yaml
 - '*.tar.gz'
 - .venv
 - .tox
 - .pytest_cache
 - scripts
+- .pre-commit-config.yaml
+- .readthedocs.yaml
+- pyproject.toml
 - requirements.txt
-- requirements-molecule.txt
-- '**/requirements-molecule.txt'
+- tox.ini
 - '**/requirements.txt'
 dependencies:
   ansible.posix: '>=1.0,<2.0'
