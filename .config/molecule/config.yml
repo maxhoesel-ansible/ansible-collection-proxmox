@@ -3,17 +3,12 @@ dependency:
   name: galaxy
 
 driver:
-  name: podman
+  name: docker
 
 provisioner:
   name: ansible
-  env: {}
-    # Cannot enable pipelining for podman at this time:
-    # https://github.com/ansible-community/molecule-podman/issues/2
-    #ANSIBLE_PIPELINING: false
-  inventory:
-    group_vars:
-      all: {}
+  env:
+    ANSIBLE_PIPELINING: true
 
 scenario:
   test_sequence:

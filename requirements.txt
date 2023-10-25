@@ -1,5 +1,5 @@
-# Module deps, useful for editor intellisense, etc.
-ansible-core==2.15.5
+# Requirements for developing this collection
+# Includes utilities, CLI helpers and so on
 
 # Linting & Formatting
 ansible-lint==6.20.3
@@ -7,13 +7,15 @@ pylint==3.0.1
 autopep8==2.0.4
 pre-commit==3.4.0
 
-# Testing
-tox==3.28.0
+# Testing libraries
+pytest==7.4.2
+pytest-virtualenv==1.7.0
+docker==6.1.3
 
-# Utility packages needed for scripts
+# Utility packages used in scripts
 pyyaml==6.0.1
 packaging==23.2
 
-# Module requirements
-requests==2.31.0
-proxmoxer==2.0.1
+# Also include a version of ansible-core for IDE hints
+# and as the default version used in tests
+ansible-core==2.15.5
