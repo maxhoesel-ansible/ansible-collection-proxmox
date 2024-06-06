@@ -1,39 +1,38 @@
 authors:
-- Max Hösel <ansible@maxhoesel.de>
+  - Max Hösel <ansible@maxhoesel.de>
 build_ignore:
-- .circleci
-- .github
-- .config
-- .vscode
-- dist
-- CODE_OF_CONDUCT.md
-- CONTRIBUTING.md
-- .yamllint
-- '*.tar.gz'
-- .venv
-- .tox
-- .pytest_cache
-- scripts
-- .pre-commit-config.yaml
-- .readthedocs.yaml
-- pyproject.toml
-- requirements.txt
-- '**/requirements.txt'
+  - .circleci
+  - .github
+  - .vscode
+  - dist
+  - CODE_OF_CONDUCT.md
+  - CONTRIBUTING.md
+  - .yamllint
+  - "*.tar.gz"
+  - .venv
+  - .tox
+  - .pytest_cache
+  - scripts
+  - .pre-commit-config.yaml
+  - .readthedocs.yaml
+  - pyproject.toml
+  - requirements.txt
+  - "**/requirements.txt"
 dependencies:
-  ansible.posix: '>=1.0,<2.0'
+  ansible.posix: ">=1.0,<2.0"
 description: Collection dealing with Proxmox VE and PBS hosts
 issues: https://github.com/maxhoesel-ansible/ansible-collection-proxmox/issues
 license:
-- GPL-3.0-or-later
-license_file: ''
+  - GPL-3.0-or-later
+license_file: ""
 name: proxmox
 namespace: maxhoesel
 readme: README.md
 repository: https://github.com/maxhoesel-ansible/ansible-collection-proxmox
 tags:
-- proxmox
-- lxc
-- kvm
-- virtualization
-- pbs
+  - proxmox
+  - lxc
+  - kvm
+  - virtualization
+  - pbs
 version: 5.1.1

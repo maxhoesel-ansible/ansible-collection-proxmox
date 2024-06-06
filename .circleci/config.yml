@@ -13,7 +13,7 @@ filters: &semver-tagged
 executors:
   pytest:
     machine:
-      # use an older ubuntu image with python 3.11 until pytest 8.0 is out
+      # python 3.11, needed for ansible-test 2.15
       image: ubuntu-2204:2023.10.1
     resource_class: large
 
@@ -34,6 +34,7 @@ jobs:
     steps:
       - collection-testing/pytest:
           pytest-args: >
+            --ci
             --ansible-version << parameters.ansible-version >>
             --node-python-version << parameters.node-python-version >>
 
