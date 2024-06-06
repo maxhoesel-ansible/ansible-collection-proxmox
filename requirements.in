@@ -18,7 +18,7 @@ proxmoxer==2.0.1
 # Linting & Formatting
 ansible-lint==24.5.0
 pylint==3.2.0
-autopep8==2.1.0
+autopep8==2.2.0
 pre-commit==3.7.1
 
 # Utility packages used in test fixtures and scripts
