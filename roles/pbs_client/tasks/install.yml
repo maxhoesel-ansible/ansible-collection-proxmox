@@ -1,16 +1,27 @@
-# The Buster repository doesn't work with the PVE-provided key, so we use the bullseye version
-# for all Debian-based destributions
+- name: Remove key from trusted.gpg.d if present
+  ansible.builtin.file:
+    # the old version of this role only ever installed the bullseye key, so thats the only one we need to remove.
+    path: /etc/apt/trusted.gpg.d/proxmox-release-bullseye.gpg
+    state: absent
+
+- name: Keyrings directory is present # noqa risky-file-permissions
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+
 - name: Proxmox APT key is present
   ansible.builtin.get_url:
-    url: https://enterprise.proxmox.com/debian/proxmox-release-bullseye.gpg
-    dest: /etc/apt/trusted.gpg.d/proxmox-release-bullseye.gpg
+    url: https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release }}.gpg
+    dest: /etc/apt/keyrings/proxmox-release-{{ ansible_distribution_release }}.gpg
     owner: root
     group: root
     mode: "644"
 
 - name: Proxmox Backup Server APT repository is present
   ansible.builtin.apt_repository:
-    repo: deb http://download.proxmox.com/debian/pbs-client bullseye main
+    repo: "deb [signed-by=/etc/apt/keyrings/proxmox-release-{{ ansible_distribution_release }}.gpg] http://download.proxmox.com/debian/pbs-client {{ ansible_distribution_release }} main"
     update_cache: yes
 
 - name: Proxmox Backup Client is installed

@@ -7,9 +7,8 @@ Additionally, a backup job can be configured and scheduled.
 
 ## Requirements
 
-- Ubuntu 20.04
-    - Note that Ubuntu 22.04 is currently broken because of [this issue](https://bugzilla.proxmox.com/show_bug.cgi?id=4191)
-- Debian 11 or later
+- Supported distros:
+    - Debian 11, 12
 - Root access via `become: yes` or equivalent
 
 ## Role Variables
