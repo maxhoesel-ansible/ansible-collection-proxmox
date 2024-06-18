@@ -46,8 +46,8 @@ workflows:
           parallelism: 3
           matrix:
             parameters:
-              ansible-version: ["2.15", "2.16"]
-              node-python-version: ["3.6"]
+              ansible-version: ["2.16", "2.17"]
+              node-python-version: ["3.7"]
       - collection-testing/pre-commit-lint:
           name: Lint
       - collection-testing/antsibull-docs:
