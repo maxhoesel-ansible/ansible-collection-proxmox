@@ -79,7 +79,7 @@ click==8.1.7
     #   typer
 click-help-colors==0.9.4
     # via molecule
-cryptography==42.0.8
+cryptography==43.0.0
     # via ansible-core
 dill==0.3.8
     # via pylint
@@ -288,13 +288,13 @@ sphinxcontrib-applehelp==1.0.8
     # via sphinx
 sphinxcontrib-devhelp==1.0.6
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.5
+sphinxcontrib-htmlhelp==2.0.6
     # via sphinx
 sphinxcontrib-jquery==4.1
     # via sphinx-rtd-theme
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.7
+sphinxcontrib-qthelp==1.0.8
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
