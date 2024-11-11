@@ -120,7 +120,7 @@ frozenlist==1.5.0
     # via
     #   aiohttp
     #   aiosignal
-identify==2.6.1
+identify==2.6.2
     # via pre-commit
 idna==3.10
     # via
@@ -259,7 +259,7 @@ rich==13.9.4
     #   enrich
     #   molecule
     #   typer
-rpds-py==0.20.1
+rpds-py==0.21.0
     # via
     #   jsonschema
     #   referencing
@@ -321,7 +321,7 @@ twiggy==0.5.1
     # via
     #   antsibull-core
     #   antsibull-docs
-typer==0.12.5
+typer==0.13.0
     # via rstcheck
 typing-extensions==4.12.2
     # via
@@ -338,13 +338,13 @@ wcmatch==10.0
     # via
     #   ansible-lint
     #   molecule
-wheel==0.44.0
+wheel==0.45.0
     # via pip-tools
 yamllint==1.35.1
     # via ansible-lint
 yarl==1.17.1
     # via aiohttp
-zipp==3.20.2
+zipp==3.21.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
