@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.4.3
     # via aiohttp
-aiohttp==3.10.10
+aiohttp==3.11.2
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -204,7 +204,9 @@ pluggy==1.5.0
 pre-commit==3.8.0
     # via -r requirements.in
 propcache==0.2.0
-    # via yarl
+    # via
+    #   aiohttp
+    #   yarl
 proxmoxer==2.1.0
     # via -r requirements.in
 pycodestyle==2.12.1
@@ -295,7 +297,7 @@ sphinx==7.4.7
     #   sphinxcontrib-jquery
 sphinx-ansible-theme==0.10.3
     # via -r requirements.in
-sphinx-rtd-theme==3.0.1
+sphinx-rtd-theme==3.0.2
     # via sphinx-ansible-theme
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
@@ -342,7 +344,7 @@ wheel==0.45.0
     # via pip-tools
 yamllint==1.35.1
     # via ansible-lint
-yarl==1.17.1
+yarl==1.17.2
     # via aiohttp
 zipp==3.21.0
     # via importlib-metadata
