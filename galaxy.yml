@@ -19,7 +19,7 @@ build_ignore:
   - requirements.txt
   - "**/requirements.txt"
 dependencies:
-  ansible.posix: ">=1.0,<2.0"
+  ansible.posix: ">=2,<2.1"
 description: Collection dealing with Proxmox VE and PBS hosts
 issues: https://github.com/maxhoesel-ansible/ansible-collection-proxmox/issues
 license:
