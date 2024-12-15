@@ -207,7 +207,7 @@ propcache==0.2.1
     # via
     #   aiohttp
     #   yarl
-proxmoxer==2.1.0
+proxmoxer==2.2.0
     # via -r requirements.in
 pycodestyle==2.12.1
     # via autopep8

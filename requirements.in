@@ -13,7 +13,7 @@
 ansible-core==2.18.1
 
 # Libraries used by modules
-proxmoxer==2.1.0
+proxmoxer==2.2.0
 
 # Linting & Formatting
 ansible-lint==24.10.0
