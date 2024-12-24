@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.4.4
     # via aiohttp
-aiohttp==3.11.10
+aiohttp==3.11.11
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -52,11 +52,11 @@ antsibull-fileutils==1.1.0
     #   antsibull-changelog
     #   antsibull-core
     #   antsibull-docs
-astroid==3.3.6
+astroid==3.3.7
     # via pylint
 asyncio-pool==0.6.0
     # via antsibull-docs
-attrs==24.2.0
+attrs==24.3.0
     # via
     #   aiohttp
     #   jsonschema
@@ -81,7 +81,7 @@ cfgv==3.4.0
     # via pre-commit
 charset-normalizer==3.4.0
     # via requests
-click==8.1.7
+click==8.1.8
     # via
     #   black
     #   click-help-colors
@@ -134,7 +134,7 @@ iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via pylint
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   ansible-core
     #   antsibull-docs
@@ -213,12 +213,12 @@ pycodestyle==2.12.1
     # via autopep8
 pycparser==2.22
     # via cffi
-pydantic==2.10.3
+pydantic==2.10.4
     # via
     #   antsibull-core
     #   antsibull-docs
     #   rstcheck-core
-pydantic-core==2.27.1
+pydantic-core==2.27.2
     # via pydantic
 pygments==2.18.0
     # via
@@ -329,7 +329,7 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   typer
-urllib3==2.2.3
+urllib3==2.3.0
     # via
     #   docker
     #   requests
