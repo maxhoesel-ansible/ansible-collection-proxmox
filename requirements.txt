@@ -225,7 +225,7 @@ pygments==2.18.0
     #   ansible-pygments
     #   rich
     #   sphinx
-pylint==3.3.2
+pylint==3.3.3
     # via -r requirements.in
 pyproject-hooks==1.2.0
     # via
