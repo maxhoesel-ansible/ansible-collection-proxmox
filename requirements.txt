@@ -90,7 +90,7 @@ click==8.1.8
     #   typer
 click-help-colors==0.9.4
     # via molecule
-cryptography==44.0.0
+cryptography==44.0.1
     # via ansible-core
 dill==0.3.9
     # via pylint
@@ -334,7 +334,7 @@ urllib3==2.3.0
     # via
     #   docker
     #   requests
-virtualenv==20.29.1
+virtualenv==20.29.2
     # via pre-commit
 wcmatch==10.0
     # via
