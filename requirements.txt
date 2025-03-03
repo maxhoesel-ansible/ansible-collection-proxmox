@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.4.6
     # via aiohttp
-aiohttp==3.11.12
+aiohttp==3.11.13
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -90,7 +90,7 @@ click==8.1.8
     #   typer
 click-help-colors==0.9.4
     # via molecule
-cryptography==44.0.1
+cryptography==44.0.2
     # via ansible-core
 dill==0.3.9
     # via pylint
@@ -132,7 +132,7 @@ importlib-metadata==8.6.1
     # via ansible-lint
 iniconfig==2.0.0
     # via pytest
-isort==6.0.0
+isort==6.0.1
     # via pylint
 jinja2==3.1.5
     # via
@@ -324,7 +324,7 @@ twiggy==0.5.1
     # via
     #   antsibull-core
     #   antsibull-docs
-typer==0.15.1
+typer==0.15.2
     # via rstcheck
 typing-extensions==4.12.2
     # via
