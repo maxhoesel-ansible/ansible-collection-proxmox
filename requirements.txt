@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.11.13
+aiohttp==3.11.14
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -49,7 +49,7 @@ antsibull-docs-parser==1.2.0
     # via antsibull-docs
 antsibull-docutils==1.1.0
     # via antsibull-changelog
-antsibull-fileutils==1.1.0
+antsibull-fileutils==1.2.0
     # via
     #   antsibull-changelog
     #   antsibull-core
@@ -132,7 +132,7 @@ imagesize==1.4.1
     # via sphinx
 importlib-metadata==8.6.1
     # via ansible-lint
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via pytest
 isort==6.0.1
     # via pylint
@@ -163,7 +163,7 @@ molecule==24.12.0
     #   molecule-plugins
 molecule-plugins[docker]==23.6.0
     # via -r requirements.in
-multidict==6.1.0
+multidict==6.2.0
     # via
     #   aiohttp
     #   yarl
@@ -194,7 +194,7 @@ perky==0.9.3
     # via antsibull-core
 pip-tools==7.4.1
     # via -r requirements.in
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via
     #   black
     #   pylint
@@ -347,7 +347,7 @@ wcmatch==10.0
     #   molecule
 wheel==0.45.1
     # via pip-tools
-yamllint==1.36.1
+yamllint==1.37.0
     # via ansible-lint
 yarl==1.18.3
     # via aiohttp
