@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.11.16
+aiohttp==3.11.17
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -94,7 +94,7 @@ click-help-colors==0.9.4
     # via molecule
 cryptography==44.0.2
     # via ansible-core
-dill==0.3.9
+dill==0.4.0
     # via pylint
 distlib==0.3.9
     # via virtualenv
@@ -118,11 +118,11 @@ filelock==3.18.0
     # via
     #   ansible-lint
     #   virtualenv
-frozenlist==1.5.0
+frozenlist==1.6.0
     # via
     #   aiohttp
     #   aiosignal
-identify==2.6.9
+identify==2.6.10
     # via pre-commit
 idna==3.10
     # via
@@ -352,7 +352,7 @@ wheel==0.45.1
     # via pip-tools
 yamllint==1.37.0
     # via ansible-lint
-yarl==1.19.0
+yarl==1.20.0
     # via aiohttp
 zipp==3.21.0
     # via importlib-metadata
