@@ -81,7 +81,7 @@ cffi==1.17.1
     # via cryptography
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
 click==8.1.8
     # via
@@ -92,7 +92,7 @@ click==8.1.8
     #   typer
 click-help-colors==0.9.4
     # via molecule
-cryptography==44.0.2
+cryptography==44.0.3
     # via ansible-core
 dill==0.4.0
     # via pylint
@@ -215,13 +215,13 @@ pycodestyle==2.13.0
     # via autopep8
 pycparser==2.22
     # via cffi
-pydantic==2.11.3
+pydantic==2.11.4
     # via
     #   antsibull-changelog
     #   antsibull-core
     #   antsibull-docs
     #   rstcheck-core
-pydantic-core==2.33.1
+pydantic-core==2.33.2
     # via pydantic
 pygments==2.19.1
     # via
@@ -327,7 +327,7 @@ twiggy==0.5.1
     # via
     #   antsibull-core
     #   antsibull-docs
-typer==0.15.2
+typer==0.15.3
     # via rstcheck
 typing-extensions==4.13.2
     # via
@@ -350,7 +350,7 @@ wcmatch==10.0
     #   molecule
 wheel==0.45.1
     # via pip-tools
-yamllint==1.37.0
+yamllint==1.37.1
     # via ansible-lint
 yarl==1.20.0
     # via aiohttp
