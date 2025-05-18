@@ -159,13 +159,10 @@ def main():
     elif token_exists and module.params["state"] == "absent":
         action = delete_token
     elif token_exists and module.params["state"] == "present":
-        if module.params["password_update"]:
-            action = update_token
-        else:
-            params = _make_token_params(module)
-            for param in params:
-                if tokens_by_name[module.params["userid"]].get(param, None) != params[param]:
-                    action = update_token
+        params = _make_token_params(module)
+        for param in params:
+            if tokens_by_name[module.params["userid"]].get(param, None) != params[param]:
+                action = update_token
 
     if action is not None:
         if module.check_mode:
