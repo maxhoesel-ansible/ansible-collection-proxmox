@@ -13,8 +13,7 @@ filters: &semver-tagged
 executors:
   pytest:
     machine:
-      # python 3.11, needed for ansible-test 2.15
-      image: ubuntu-2204:2023.10.1
+      image: ubuntu-2204:2024.08.1 # python 3.12, supports ansible 2.16+2.17
     resource_class: large
 
 jobs:
@@ -23,31 +22,34 @@ jobs:
       parallelism:
         description: Number of parallel runners
         type: integer
-      ansible-version:
-        description: Version of Ansible to use for testing
-        type: string
-      node-python-version:
-        description: Version of python to use for module tests
+      ansible-python-version-tuple:
+        description: Comma-separated version tuple containing Ansible and node python version to use
         type: string
     executor: pytest
     parallelism: << parameters.parallelism >>
     steps:
+      - run:
+          name: Split version tuples
+          command: |
+            export ANSIBLE_VERSION_STRING=$(echo "<< parameters.ansible-python-version-tuple >>" | cut -d ',' -f 1)
+            export PYTHON_VERSION_STRING=$(echo "<< parameters.ansible-python-version-tuple >>" | cut -d ',' -f 2)
+            echo export ANSIBLE_VERSION="$ANSIBLE_VERSION_STRING" >> "$BASH_ENV"
+            echo export PYTHON_VERSION="$PYTHON_VERSION_STRING" >> "$BASH_ENV"
       - collection-testing/pytest:
           pytest-args: >
             --ci
-            --ansible-version << parameters.ansible-version >>
-            --node-python-version << parameters.node-python-version >>
+            --ansible-version "$ANSIBLE_VERSION"
+            --node-python-version "$PYTHON_VERSION"
 
 workflows:
   ci:
     jobs:
       - test:
-          name: Test (ansible-<< matrix.ansible-version >>)
+          name: Test (ansible-<< matrix.ansible-python-version-tuple >>)
           parallelism: 3
           matrix:
             parameters:
-              ansible-version: ["2.17", "2.18"]
-              node-python-version: ["3.9"]
+              ansible-python-version-tuple: ["2.17,3.7", "2.18,3.8"]
       - collection-testing/pre-commit-lint:
           name: Lint
       - collection-testing/antsibull-docs:

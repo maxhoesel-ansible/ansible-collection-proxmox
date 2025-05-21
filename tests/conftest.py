@@ -10,7 +10,7 @@ from packaging import version
 import pytest
 import yaml
 
-NODE_PYTHON_DEFAULT_VERSION = "3.6"
+NODE_PYTHON_DEFAULT_VERSION = "3.8"
 
 with open("galaxy.yml", encoding="utf-8") as f:
     GALAXY_YML = yaml.safe_load(f)
