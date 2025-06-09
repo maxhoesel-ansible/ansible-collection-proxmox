@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.12.6
+aiohttp==3.12.11
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -118,7 +118,7 @@ filelock==3.18.0
     # via
     #   ansible-lint
     #   virtualenv
-frozenlist==1.6.0
+frozenlist==1.6.2
     # via
     #   aiohttp
     #   aiosignal
@@ -277,7 +277,7 @@ rstcheck==6.2.5
     #   antsibull-docs
 rstcheck-core==1.2.2
     # via rstcheck
-ruamel-yaml==0.18.12
+ruamel-yaml==0.18.13
     # via ansible-lint
 ruamel-yaml-clib==0.2.12
     # via ruamel-yaml
@@ -323,7 +323,7 @@ subprocess-tee==0.4.2
     # via
     #   ansible-compat
     #   ansible-lint
-tomlkit==0.13.2
+tomlkit==0.13.3
     # via pylint
 twiggy==0.5.1
     # via
@@ -331,7 +331,7 @@ twiggy==0.5.1
     #   antsibull-docs
 typer==0.16.0
     # via rstcheck
-typing-extensions==4.13.2
+typing-extensions==4.14.0
     # via
     #   pydantic
     #   pydantic-core
@@ -356,7 +356,7 @@ yamllint==1.37.1
     # via ansible-lint
 yarl==1.20.0
     # via aiohttp
-zipp==3.22.0
+zipp==3.23.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
