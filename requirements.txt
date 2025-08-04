@@ -10,7 +10,7 @@ aiofiles==24.1.0
     #   antsibull-fileutils
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.12.14
+aiohttp==3.12.15
     # via
     #   antsibull-core
     #   antsibull-docs
@@ -73,11 +73,11 @@ black==25.1.0
     # via ansible-lint
 bracex==2.6
     # via wcmatch
-build==1.2.2.post1
+build==1.3.0
     # via
     #   antsibull-core
     #   pip-tools
-certifi==2025.7.14
+certifi==2025.8.3
     # via requests
 cffi==1.17.1
     # via cryptography
@@ -347,7 +347,7 @@ urllib3==2.5.0
     # via
     #   docker
     #   requests
-virtualenv==20.32.0
+virtualenv==20.33.0
     # via pre-commit
 wcmatch==10.1
     # via
