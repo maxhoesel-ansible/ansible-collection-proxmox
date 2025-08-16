@@ -4,26 +4,36 @@
     path: /etc/apt/trusted.gpg.d/proxmox-release-bullseye.gpg
     state: absent
 
-- name: Keyrings directory is present # noqa risky-file-permissions
+- name: Determine repository suite
+  ansible.builtin.set_fact:
+    # Non-debian distributions only get the static binary so the exact suite does not matter
+    _pbs_client_apt_suite: "{{ (ansible_distribution == 'Debian') | ternary(ansible_distribution_release, 'trixie') }}"
+
+- name: old list-style repository is absent
   ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    owner: root
-    group: root
+    path: /etc/apt/sources.list.d/download_proxmox_com_debian_pbs_client.list
+    state: absent
 
-- name: Proxmox APT key is present
-  ansible.builtin.get_url:
-    url: https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release }}.gpg
-    dest: /etc/apt/keyrings/proxmox-release-{{ ansible_distribution_release }}.gpg
-    owner: root
-    group: root
-    mode: "644"
+- name: python3-debian is installed
+  ansible.builtin.apt:
+    name: python3-debian
 
-- name: Proxmox Backup Server APT repository is present
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/proxmox-release-{{ ansible_distribution_release }}.gpg] http://download.proxmox.com/debian/pbs-client {{ ansible_distribution_release }} main"
-    update_cache: yes
+- name: deb822-style repository is present
+  ansible.builtin.deb822_repository:
+    name: pbs-client
+    types: deb
+    uris: http://download.proxmox.com/debian/pbs-client
+    suites: "{{ _pbs_client_apt_suite }}"
+    components: main
+    signed_by: https://enterprise.proxmox.com/debian/proxmox-release-{{ _pbs_client_apt_suite }}.gpg
 
 - name: Proxmox Backup Client is installed
   ansible.builtin.apt:
     name: proxmox-backup-client
+    update_cache: true
+  when: ansible_distribution == "Debian"
+- name: Proxmox Backup Client (static) is installed
+  ansible.builtin.apt:
+    name: proxmox-backup-client-static
+    update_cache: true
+  when: ansible_distribution != "Debian"

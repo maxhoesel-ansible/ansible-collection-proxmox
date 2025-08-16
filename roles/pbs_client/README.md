@@ -8,7 +8,8 @@ Additionally, a backup job can be configured and scheduled.
 ## Requirements
 
 - Supported distros:
-    - Debian 11, 12
+    - Debian 11, 12, 13
+    - Ubuntu LTS 22.04, 24.04
 - Root access via `become: yes` or equivalent
 
 ## Role Variables
