@@ -1,16 +1,73 @@
-- name: "Selected PVE repository is enabled"
-  apt_repository:
-    repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
-    filename: "{{ pve_repo_names[pve_repo_type] }}"
-    update_cache: no
+- name: Configure list-based repositories (PVE <=8)
+  block:
+    - name: Selected PVE repository is enabled
+      ansible.builtin.apt_repository:
+        repo: "deb {{ pve_repo_baseurl[pve_repo_type] }}/pve {{ ansible_distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
+        filename: "{{ pve_repo_names[pve_repo_type] }}"
+        update_cache: no
+    - name: Other PVE repositories are disabled
+      ansible.builtin.apt_repository:
+        repo: "deb {{ pve_repo_baseurl[item] }}/pve {{ ansible_distribution_release }} {{ pve_repo_names[item] }}"
+        state: absent
+        filename: "{{ pve_repo_names[item] }}"
+        update_cache: no
+      loop: "{{ pve_disable_repos }}"
 
-- name: Other PVE repositories are disabled
-  apt_repository:
-    repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} {{ pve_repo_names[item] }}"
-    state: absent
-    filename: "{{ pve_repo_names[item] }}"
-    update_cache: no
-  loop: "{{ pve_disable_repos }}"
+    - name: Retrieve configured ceph release
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: set -o pipefail && cat /etc/apt/sources.list.d/ceph.list | cut -d ' ' -f 2 | cut -d '-' -f 2
+      register: _pve_ceph_release
+      changed_when: false
+      check_mode: false
+    - name: Configure ceph repository
+      ansible.builtin.copy:
+        content: |
+          deb {{ pve_repo_baseurl[pve_repo_type] }}/ceph-{{ _pve_ceph_release.stdout }} {{ ansible_distribution_release }} {{ pve_ceph_repo_names[pve_repo_type] }}
+        dest: /etc/apt/sources.list.d/ceph.list
+        owner: root
+        group: root
+        mode: "644"
+  when: ansible_distribution_major_version | int <= 12
+
+- name: Configure sources-based repositories (PVE >=9)
+  block:
+    - name: Enable selected PVE repository
+      ansible.builtin.deb822_repository:
+        name: "{{ pve_repo_names[pve_repo_type] }}"
+        types: deb
+        uris: "{{ pve_repo_baseurl[pve_repo_type] }}/pve"
+        suites: "{{ ansible_distribution_release }}"
+        components: "{{ pve_repo_names[pve_repo_type] }}"
+        signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+        enabled: true
+    - name: Disable other PVE repositories
+      ansible.builtin.deb822_repository:
+        name: "{{ pve_repo_names[item] }}"
+        types: deb
+        uris: "{{ pve_repo_baseurl[item] }}/pve"
+        suites: "{{ ansible_distribution_release }}"
+        components: "{{ pve_repo_names[item] }}"
+        signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+        enabled: false
+      loop: "{{ pve_disable_repos }}"
+
+    - name: Retrieve configured ceph release
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: set -o pipefail && grep URIs /etc/apt/sources.list.d/ceph.sources | cut -d '-' -f 2
+      register: _pve_ceph_release
+      changed_when: false
+      check_mode: false
+    - name: Configure ceph repository
+      ansible.builtin.deb822_repository:
+        name: "ceph"
+        types: deb
+        uris: "{{ pve_repo_baseurl[pve_repo_type] }}/ceph-{{ _pve_ceph_release.stdout }}"
+        suites: "{{ ansible_distribution_release }}"
+        components: "{{ pve_ceph_repo_names[pve_repo_type] }}"
+        signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+  when: ansible_distribution_major_version | int >= 13
 
 - name: Update APT cache
   apt:
