@@ -1,26 +1,25 @@
 - name: Perform checks
   include_tasks: checks.yml
 
-# This step is required to properly decrypt the root password
-# if it is stored in ansible-vault
-- name: Decrypt root password
-  set_fact:
-    pve_root_password: "{{ pve_root_password }}"
-  no_log: true
-
 - name: Root password is set
   user:
     name: root
     password: "{{ pve_root_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  when: pve_root_password is defined
 
 - name: Setup PBS repo
   include_tasks: repo.yml
+
 - name: Install microcode
   ansible.builtin.include_tasks: ucode.yml
-  when: pve_install_ucode
+  when:
+    - pve_install_ucode
+    - ansible_distribution_major_version | int >= 13
+
 - name: Configure CPU governor
   include_tasks: cpu.yml
   when: pve_set_cpu
+
 - name: Enable PCIe passthrough
   include_tasks: pcie_passthrough.yml
   when: pve_enable_pcie_passthrough

@@ -1,7 +1,15 @@
+pve_repo_baseurl:
+  no-subscription: http://download.proxmox.com/debian
+  test: http://download.proxmox.com/debian
+  enterprise: https://enterprise.proxmox.com/debian
 pve_repo_names:
   no-subscription: pve-no-subscription
   enterprise: pve-enterprise
-  test: pvetest
+  test: "{{ 'pvetest' if (ansible_distribution_major_version | int) < 13 else 'pve-test' }}"
+pve_ceph_repo_names:
+  no-subscription: no-subscription
+  enterprise: enterprise
+  test: test
 pve_disable_repos: "{{ pve_repo_names.keys() | difference([pve_repo_type]) }}"
 
 pve_non_free_firmware_text: "{{ pve_install_ucode | ternary(((ansible_distribution_major_version | int) < 12) | ternary('non-free', 'non-free-firmware'), '') }}"
