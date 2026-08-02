@@ -9,7 +9,7 @@
         pbs_client_password: nonexistent
         pbs_client_backup_archives:
           - "root.pxar:/"
-        pbs_client_backup_id: "{{ ansible_fqdn }}"
+        pbs_client_backup_id: "{{ ansible_facts.fqdn }}"
         pbs_client_include_mountpoints:
           - /var/external-data
         pbs_client_encryption_mode: rsa

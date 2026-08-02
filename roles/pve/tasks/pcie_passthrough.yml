@@ -5,7 +5,7 @@
     owner: root
     group: root
     mode: "644"
-  when: '"GenuineIntel" in ansible_processor | unique'
+  when: '"GenuineIntel" in ansible_facts.processor | unique'
   notify: reboot host to enable pcie passthrough
 
 - name: vfio kernel modules are enabled

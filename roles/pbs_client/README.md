@@ -8,8 +8,8 @@ Additionally, a backup job can be configured and scheduled.
 ## Requirements
 
 - Supported distros:
-    - Debian 11, 12, 13
-    - Ubuntu LTS 22.04, 24.04
+    - Debian 12, 13
+    - Ubuntu LTS 22.04, 24.04, 26.04
 - Root access via `become: yes` or equivalent
 
 ## Role Variables
@@ -140,7 +140,7 @@ All encryption modes require you to somehow save the encryption keyfile/private 
           - "root.pxar:/"
         pbs_client_include_mountpoints:
           - /var/external-data
-        pbs_client_backup_id: "{{ ansible_fqdn }}" # use the FQDN instead of just the hostname
+        pbs_client_backup_id: "{{ ansible_facts.fqdn }}" # use the FQDN instead of just the hostname
         # Encryption
         pbs_client_encryption_mode: rsa
         pbs_client_encryption_pubkey: "{{ lookup('file', '~/pbs-pubkey.pem') }}"

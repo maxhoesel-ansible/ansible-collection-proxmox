@@ -7,7 +7,7 @@
 - name: Determine repository suite
   ansible.builtin.set_fact:
     # Non-debian distributions only get the static binary so the exact suite does not matter
-    _pbs_client_apt_suite: "{{ (ansible_distribution == 'Debian') | ternary(ansible_distribution_release, 'trixie') }}"
+    _pbs_client_apt_suite: "{{ (ansible_facts.distribution == 'Debian') | ternary(ansible_facts.distribution_release, 'trixie') }}"
 
 - name: old list-style repository is absent
   ansible.builtin.file:
@@ -31,9 +31,9 @@
   ansible.builtin.apt:
     name: proxmox-backup-client
     update_cache: true
-  when: ansible_distribution == "Debian"
+  when: ansible_facts.distribution == "Debian"
 - name: Proxmox Backup Client (static) is installed
   ansible.builtin.apt:
     name: proxmox-backup-client-static
     update_cache: true
-  when: ansible_distribution != "Debian"
+  when: ansible_facts.distribution != "Debian"

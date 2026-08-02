@@ -5,14 +5,14 @@ pve_repo_baseurl:
 pve_repo_names:
   no-subscription: pve-no-subscription
   enterprise: pve-enterprise
-  test: "{{ 'pvetest' if (ansible_distribution_major_version | int) < 13 else 'pve-test' }}"
+  test: "{{ 'pvetest' if (ansible_facts.distribution_major_version | int) < 13 else 'pve-test' }}"
 pve_ceph_repo_names:
   no-subscription: no-subscription
   enterprise: enterprise
   test: test
 pve_disable_repos: "{{ pve_repo_names.keys() | difference([pve_repo_type]) }}"
 
-pve_non_free_firmware_text: "{{ pve_install_ucode | ternary(((ansible_distribution_major_version | int) < 12) | ternary('non-free', 'non-free-firmware'), '') }}"
+pve_non_free_firmware_text: "{{ pve_install_ucode | ternary(((ansible_facts.distribution_major_version | int) < 12) | ternary('non-free', 'non-free-firmware'), '') }}"
 pve_ucode_package:
   AuthenticAMD: amd64-microcode
   GenuineIntel: intel-microcode

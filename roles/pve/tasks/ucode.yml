@@ -5,10 +5,10 @@
     owner: root
     group: root
     mode: "644"
-  when: ansible_distribution_major_version | int <= 12
+  when: ansible_facts.distribution_major_version | int <= 12
 
 - name: Microcode package is installed
   ansible.builtin.apt:
-    name: "{{ pve_ucode_package[ansible_processor[1]] }}"
+    name: "{{ pve_ucode_package[ansible_facts.processor[1]] }}"
     update_cache: yes
   notify: reboot host to update microcode
