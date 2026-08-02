@@ -140,7 +140,7 @@ All encryption modes require you to somehow save the encryption keyfile/private 
           - "root.pxar:/"
         pbs_client_include_mountpoints:
           - /var/external-data
-        pbs_client_backup_id: "{{ ansible_fqdn }}" # use the FQDN instead of just the hostname
+        pbs_client_backup_id: "{{ ansible_facts.fqdn }}" # use the FQDN instead of just the hostname
         # Encryption
         pbs_client_encryption_mode: rsa
         pbs_client_encryption_pubkey: "{{ lookup('file', '~/pbs-pubkey.pem') }}"

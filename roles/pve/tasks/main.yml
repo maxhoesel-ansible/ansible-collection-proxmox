@@ -14,7 +14,7 @@
   ansible.builtin.include_tasks: ucode.yml
   when:
     - pve_install_ucode
-    - ansible_distribution_major_version | int >= 13
+    - ansible_facts.distribution_major_version | int >= 13
 
 - name: Configure CPU governor
   include_tasks: cpu.yml

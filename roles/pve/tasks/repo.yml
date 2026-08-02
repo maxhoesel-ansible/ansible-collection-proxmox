@@ -2,12 +2,12 @@
   block:
     - name: Selected PVE repository is enabled
       ansible.builtin.apt_repository:
-        repo: "deb {{ pve_repo_baseurl[pve_repo_type] }}/pve {{ ansible_distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
+        repo: "deb {{ pve_repo_baseurl[pve_repo_type] }}/pve {{ ansible_facts.distribution_release }} {{ pve_repo_names[pve_repo_type] }}"
         filename: "{{ pve_repo_names[pve_repo_type] }}"
         update_cache: no
     - name: Other PVE repositories are disabled
       ansible.builtin.apt_repository:
-        repo: "deb {{ pve_repo_baseurl[item] }}/pve {{ ansible_distribution_release }} {{ pve_repo_names[item] }}"
+        repo: "deb {{ pve_repo_baseurl[item] }}/pve {{ ansible_facts.distribution_release }} {{ pve_repo_names[item] }}"
         state: absent
         filename: "{{ pve_repo_names[item] }}"
         update_cache: no
@@ -23,12 +23,12 @@
     - name: Configure ceph repository
       ansible.builtin.copy:
         content: |
-          deb {{ pve_repo_baseurl[pve_repo_type] }}/ceph-{{ _pve_ceph_release.stdout }} {{ ansible_distribution_release }} {{ pve_ceph_repo_names[pve_repo_type] }}
+          deb {{ pve_repo_baseurl[pve_repo_type] }}/ceph-{{ _pve_ceph_release.stdout }} {{ ansible_facts.distribution_release }} {{ pve_ceph_repo_names[pve_repo_type] }}
         dest: /etc/apt/sources.list.d/ceph.list
         owner: root
         group: root
         mode: "644"
-  when: ansible_distribution_major_version | int <= 12
+  when: ansible_facts.distribution_major_version | int <= 12
 
 - name: Configure sources-based repositories (PVE >=9)
   block:
@@ -37,7 +37,7 @@
         name: "{{ pve_repo_names[pve_repo_type] }}"
         types: deb
         uris: "{{ pve_repo_baseurl[pve_repo_type] }}/pve"
-        suites: "{{ ansible_distribution_release }}"
+        suites: "{{ ansible_facts.distribution_release }}"
         components: "{{ pve_repo_names[pve_repo_type] }}"
         signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
         enabled: true
@@ -46,7 +46,7 @@
         name: "{{ pve_repo_names[item] }}"
         types: deb
         uris: "{{ pve_repo_baseurl[item] }}/pve"
-        suites: "{{ ansible_distribution_release }}"
+        suites: "{{ ansible_facts.distribution_release }}"
         components: "{{ pve_repo_names[item] }}"
         signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
         enabled: false
@@ -64,10 +64,10 @@
         name: "ceph"
         types: deb
         uris: "{{ pve_repo_baseurl[pve_repo_type] }}/ceph-{{ _pve_ceph_release.stdout }}"
-        suites: "{{ ansible_distribution_release }}"
+        suites: "{{ ansible_facts.distribution_release }}"
         components: "{{ pve_ceph_repo_names[pve_repo_type] }}"
         signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
-  when: ansible_distribution_major_version | int >= 13
+  when: ansible_facts.distribution_major_version | int >= 13
 
 - name: Update APT cache
   apt:
