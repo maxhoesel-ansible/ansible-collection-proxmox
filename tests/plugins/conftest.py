@@ -1,12 +1,13 @@
 # pylint: disable=redefined-outer-name
+from collections.abc import Generator
 from dataclasses import dataclass
-from typing import cast, Generator
+from typing import cast
 
 import docker
+import pytest
+from docker.errors import NotFound
 from docker.models.containers import Container
 from docker.models.networks import Network
-from docker.errors import NotFound
-import pytest
 
 CADDY_NETWORK = "ansible-collection-caddy-test"
 CADDY_CONTAINER_NAME = "ansible-collection-caddy-test-server"
