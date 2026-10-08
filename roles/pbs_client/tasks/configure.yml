@@ -4,9 +4,13 @@
   failed_when: '_key_check.rc != 0 and "no default file found" not in  _key_check.stderr'
   changed_when: no
   check_mode: no
+  when: pbs_client_encryption_mode != 'none'
 - name: Create backup key
   ansible.builtin.command: sudo proxmox-backup-client key create --kdf none
-  when: _key_check.stdout | length == 0
+  when:
+    - pbs_client_encryption_mode != 'none'
+    - _key_check.skipped is not defined or not _key_check.skipped
+    - _key_check.stdout | length == 0
 
 - name: Check if master pubkey is present
   ansible.builtin.command: proxmox-backup-client key show-master-pubkey --output-format json
@@ -14,6 +18,7 @@
   failed_when: '_master_key_check.rc != 0 and "no default master key available" not in  _master_key_check.stderr'
   changed_when: no
   check_mode: no
+  when: pbs_client_encryption_mode != 'none'
 - block: # noqa unnamed-task
     - name: Create master pubkey tmpfile
       ansible.builtin.copy:
@@ -24,7 +29,10 @@
         mode: "640"
     - name: Import master pubkey # noqa no-changed-when
       ansible.builtin.command: proxmox-backup-client key import-master-pubkey /tmp/proxmox-backup-client-pubkey.pem
-  when: _master_key_check.stdout | length == 0
+  when:
+    - pbs_client_encryption_mode != 'none'
+    - _master_key_check.skipped is not defined or not _master_key_check.skipped
+    - _master_key_check.stdout | length == 0
   always:
     - name: Master pubkey tmpfile is absent
       ansible.builtin.file:
