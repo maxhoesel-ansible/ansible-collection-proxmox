@@ -99,7 +99,7 @@ def pbs_server_host():
                 pass
 
 
-def test_api_token_auth(collection_test_env, pbs_server_host):
+def test_api_token_auth(collection_test_env, pbs_server_host):  # pylint: disable=redefined-outer-name
     env = {k: v for k, v in os.environ.items() if k != "PROXMOX_PASSWORD"}
     collection_test_env.run(
         ["ansible-playbook", str(PLAYBOOK),
