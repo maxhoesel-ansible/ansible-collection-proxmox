@@ -1,0 +1,237 @@
+---
+# Integration playbook for API token authentication (runs against the
+# disposable PBS container started by tests/plugins/test_api_token_auth.py).
+# All assertions live here because the pytest harness only checks the
+# exit code of ansible-playbook.
+- name: Password-auth regression and token bootstrap
+  hosts: localhost
+  gather_facts: false
+  vars:
+    api_host: "{{ pbs_api_host }}"
+    admin_user: admin@pbs
+    admin_password: pbspbs
+    automation_user: automation@pbs
+  tasks:
+    - name: Create automation user with password auth (changed)
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ admin_user }}"
+        api_password: "{{ admin_password }}"
+        userid: "{{ automation_user }}"
+        state: present
+      register: user_create
+      no_log: true
+
+    - name: Assert user creation reported changed
+      ansible.builtin.assert:
+        that: user_create.changed
+
+    - name: Create automation user with password auth (idempotent)
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ admin_user }}"
+        api_password: "{{ admin_password }}"
+        userid: "{{ automation_user }}"
+        state: present
+      register: user_idem
+      no_log: true
+
+    - name: Assert second run reported unchanged
+      ansible.builtin.assert:
+        that: not user_idem.changed
+
+    - name: Create API token for automation user
+      maxhoesel.proxmox.pbs_token:
+        api_host: "{{ api_host }}"
+        api_user: "{{ admin_user }}"
+        api_password: "{{ admin_password }}"
+        userid: "{{ automation_user }}"
+        name: ansible
+        state: present
+      register: token_create
+      no_log: true
+
+    - name: Assert token secret was returned
+      ansible.builtin.assert:
+        that:
+          - token_create.secret is defined
+          - token_create.secret | length > 0
+
+    # PBS intersects the token's privileges with its owner's, so both need
+    # the ACL for the token to be able to do anything.
+    - name: Grant / Admin to automation user
+      maxhoesel.proxmox.pbs_acl:
+        api_host: "{{ api_host }}"
+        api_user: "{{ admin_user }}"
+        api_password: "{{ admin_password }}"
+        path: /
+        role: Admin
+        propagate: true
+        auth_id: "{{ automation_user }}"
+        state: present
+
+    - name: Grant / Admin to automation token
+      maxhoesel.proxmox.pbs_acl:
+        api_host: "{{ api_host }}"
+        api_user: "{{ admin_user }}"
+        api_password: "{{ admin_password }}"
+        path: /
+        role: Admin
+        propagate: true
+        auth_id: "{{ automation_user }}!ansible"
+        state: present
+
+- name: Token-auth reconciliation and error contracts
+  hosts: localhost
+  gather_facts: false
+  vars:
+    api_host: "{{ pbs_api_host }}"
+    automation_user: automation@pbs
+    token_name: ansible
+    token_secret: "{{ hostvars['localhost']['token_create']['secret'] }}"
+    target_user: tokenmanaged@pbs
+  tasks:
+    # PBS propagates ACL changes to the API proxy asynchronously (~5s); retry
+    # until the token actually holds its privileges.
+    - name: Wait for token ACL to take effect
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        userid: "{{ target_user }}"
+        state: present
+      register: token_user_create
+      retries: 30
+      delay: 2
+      until: not token_user_create.failed
+
+    - name: Assert token-auth user creation reported changed
+      ansible.builtin.assert:
+        that: token_user_create.changed
+
+    - name: Create managed user with implicit token auth (idempotent)
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        userid: "{{ target_user }}"
+        state: present
+      register: token_user_idem
+
+    - name: Assert second token-auth run reported unchanged
+      ansible.builtin.assert:
+        that: not token_user_idem.changed
+
+    - name: Grant ACL with explicit api_auth_method token (changed)
+      maxhoesel.proxmox.pbs_acl:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        api_auth_method: token
+        path: /datastore
+        role: DatastoreAdmin
+        auth_id: "{{ target_user }}"
+        state: present
+      register: token_acl_create
+
+    - name: Assert token-auth ACL creation reported changed
+      ansible.builtin.assert:
+        that: token_acl_create.changed
+
+    - name: Grant ACL with explicit api_auth_method token (idempotent)
+      maxhoesel.proxmox.pbs_acl:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        api_auth_method: token
+        path: /datastore
+        role: DatastoreAdmin
+        auth_id: "{{ target_user }}"
+        state: present
+      register: token_acl_idem
+
+    - name: Assert second ACL run reported unchanged
+      ansible.builtin.assert:
+        that: not token_acl_idem.changed
+
+    - name: Expect ambiguous-credentials failure
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_password: pbspbs
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        userid: "{{ target_user }}"
+        state: present
+      register: ambiguous_fail
+      failed_when: >-
+        ambiguous_fail.msg != 'ambiguous credentials: supply only one method
+        or set api_auth_method'
+      changed_when: false
+
+    - name: Assert ambiguous-credentials failure message
+      ansible.builtin.assert:
+        that:
+          - >-
+            ambiguous_fail.msg == 'ambiguous credentials: supply only one
+            method or set api_auth_method'
+
+    - name: Expect missing-credentials failure
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        userid: "{{ target_user }}"
+        state: present
+      register: neither_fail
+      failed_when: not (neither_fail.msg is match('No authentication credentials found.'))
+      changed_when: false
+
+    - name: Assert missing-credentials failure message
+      ansible.builtin.assert:
+        that:
+          - neither_fail.msg is match('No authentication credentials found.')
+
+    - name: Expect token-selector conflict failure
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_password: pbspbs
+        api_auth_method: token
+        userid: "{{ target_user }}"
+        state: present
+      register: selector_conflict_fail
+      failed_when: >-
+        selector_conflict_fail.msg != 'api_auth_method: token cannot be
+        combined with password credentials'
+      changed_when: false
+
+    - name: Assert token-selector conflict failure message
+      ansible.builtin.assert:
+        that:
+          - >-
+            selector_conflict_fail.msg == 'api_auth_method: token cannot be
+            combined with password credentials'
+
+    - name: Cleanup managed user
+      maxhoesel.proxmox.pbs_user:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        userid: "{{ target_user }}"
+        state: absent
+
+    - name: Cleanup managed ACL
+      maxhoesel.proxmox.pbs_acl:
+        api_host: "{{ api_host }}"
+        api_user: "{{ automation_user }}"
+        api_token_name: "{{ token_name }}"
+        api_token_secret: "{{ token_secret }}"
+        path: /datastore
+        role: DatastoreAdmin
+        auth_id: "{{ target_user }}"
+        state: absent
