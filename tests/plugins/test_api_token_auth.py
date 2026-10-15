@@ -99,11 +99,11 @@ def pbs_server():
                 pass
 
 
-def test_api_token_auth(collection_test_env, pbs_server):
+def test_api_token_auth(collection_test_env, pbs_server_host):
     env = {k: v for k, v in os.environ.items() if k != "PROXMOX_PASSWORD"}
     collection_test_env.run(
         ["ansible-playbook", str(PLAYBOOK),
-         "-e", f"pbs_api_host={pbs_server}",
+         "-e", f"pbs_api_host={pbs_server_host}",
          "-e", f"ansible_python_interpreter={sys.executable}"],
         env=env,
     )
