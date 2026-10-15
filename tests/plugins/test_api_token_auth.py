@@ -47,7 +47,7 @@ def _wait_readable(host, port, timeout=180):
 
 
 @pytest.fixture()
-def pbs_server():
+def pbs_server_host():
     try:
         client = docker.from_env()
         client.ping()
